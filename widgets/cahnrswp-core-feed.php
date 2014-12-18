@@ -21,7 +21,55 @@ class CAHNRSWP_Core_Feed extends WP_Widget {
 	 */
 	public function widget( $args, $instance ) {
 		
-		echo 'hello world';
+		echo $args['before_widget'];
+		
+		if( isset( $instance['title'] ) && $instance['title'] ){
+			
+			echo '<h3>' . $instance['title'] . '</h3>';
+			
+		}
+		
+		if( !isset( $instance['display'] ) ) $instance['display'] = 'promo';
+		
+		$posts = apply_filters( 'cwp_core_feed_post' , array() );
+		
+		if( !$posts ){
+		
+			$query = CAHNRWP_Core_Query::cwp_get_local_query( $instance );
+			
+			$the_query = new WP_Query( $query );
+	
+			if ( $the_query->have_posts() ) {
+	
+				while ( $the_query->have_posts() ) {
+					
+					$the_query->the_post();
+					
+					$post_obj = CAHNRWP_Core_Post::cwp_get_loop_post_obj( $the_query->post , $instance );
+					
+					$posts[] = $post_obj;
+									
+				}; // end while
+				
+			}; // end if
+			
+			wp_reset_postdata();
+			
+		} // end if !posts
+		
+		if ( $posts ) {
+			
+			foreach( $posts as $post ){
+				
+				CAHNRWP_Core_Post::cwp_post_obj_advanced( $post_obj , $instance );
+				
+				CAHNRWP_Core_Display::cwp_display_post( $post , $instance['display'] );
+				
+			}; // end foreach
+			
+		} // end if
+		
+		echo $args['after_widget'];
 		
 	}	
 
@@ -32,15 +80,7 @@ class CAHNRSWP_Core_Feed extends WP_Widget {
 	 */
 	public function form( $instance ) {
 		
-		$defaults = array(
-			'post_type' => 'post',
-			'display'   => 'promo',
-			'count'     => 3,
-		);
-		
 		$cwp_form = new CAHNRWP_Core_Form;
-		
-		$cwp_form->cwp_set_defaults( $defaults , $instance ); 
 		
 		$post_types = $cwp_form->cwp_get_post_types();
 		

@@ -1,4 +1,17 @@
+<?php 
+	if( !isset( $instance['title'] ) ) $instance['title'] = '';
+	if( !isset( $instance['post_type'] ) ) $instance['post_type'] = 'post';
+	if( !isset( $instance['tax_query'] ) ) $instance['tax_query'] = 'category';
+	if( !isset( $instance['tax_terms'] ) ) $instance['tax_terms'] = '';
+	if( !isset( $instance['posts_per_page'] ) ) $instance['posts_per_page'] = 3;
+	if( !isset( $instance['display'] ) ) $instance['display'] = 'promo';
+;?>
 <div class="cwp-form">
+	<div class="cwp-form-section">
+    	<p>
+	<input class="widefat" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $instance['title'] ); ?>">
+    	</p>
+    </div>
 	<div class="cwp-form-section">
     	<a href="#" class="cwp-form-section-title">
         	Basic Settings
@@ -13,15 +26,15 @@
                 </select>
             </p>
             <p>
-            	<select name="<?php echo $this->get_field_name( 'taxonomy' ); ?>">
-                	<option value="category" <?php selected( $instance['taxonomy'] , 'category' );?> >Categories</option>
-                    <option value="post_tag" <?php selected( $instance['taxonomy'] , 'post_tag' );?> >Tags</option>
-                    <option value="any" <?php selected( $instance['taxonomy'] , 'any' );?> >Any</option>
+            	<select id="<?php echo $this->get_field_id( 'tax_query' ); ?>" name="<?php echo $this->get_field_name( 'tax_query' ); ?>">
+                	<option value="category" <?php selected( $instance['tax_query'] , 'category' );?> >Categories</option>
+                    <option value="post_tag" <?php selected( $instance['tax_query'] , 'post_tag' );?> >Tags</option>
+                    <option value="any" <?php selected( $instance['tax_query'] , 'any' );?> >Any</option>
                 </select> : 
-                <input type="text" name="<?php echo $this->get_field_name( 'tax_names' ); ?>" value="<?php echo $instance['tax_names']; ?>" />
+                <input type="text" name="<?php echo $this->get_field_name( 'tax_terms' ); ?>" value="<?php echo $instance['tax_terms']; ?>" />
             </p>
             <p>
-            	<label>Count: </label><input type="text" name="<?php echo $this->get_field_name( 'count' ); ?>" value="<?php echo $instance['count']; ?>" />
+            	<label>Count: </label><input type="text" name="<?php echo $this->get_field_name( 'posts_per_page' ); ?>" value="<?php echo $instance['posts_per_page']; ?>" />
             </p>
             <p>
             	<label>display As: </label>
@@ -39,6 +52,7 @@
         	Advanced Settings
         </a>
         <div class="cwp-form-section-content">
+        	<?php include CAHNRSWPCOREDIR . '/inc/inc-form-advanced.php'; ?>
         </div>
     </div>
 </div>
