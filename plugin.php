@@ -92,7 +92,7 @@ class CAHNRWP_Core_Form {
 			
 		} // end foreach
 		
-		return $post_types;
+		return apply_filters( 'cwp_core_get_post_types' , $post_types );
 	}
 	
 	
@@ -154,6 +154,15 @@ class CAHNRWP_Core_Post {
 	public static function cwp_get_loop_post_obj( $post ){
 		
 		$post_obj = new stdClass();
+		
+		if( isset( $post->post_type ) ){
+		
+			$post_obj->content_type = $post->post_type;
+			
+		} else {
+			
+			$post_obj->content_type = '';
+		};
 			
 		$post_obj->title = get_the_title();
 			

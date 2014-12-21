@@ -1,3 +1,7 @@
+.cwp-gallery h4 {
+	padding-top: 0;
+}
+
 .cwp-gallery img {
 	display: block;
 	width: 100%;
@@ -9,3 +13,12 @@
 	position: relative;
 }
 
+.has-image.video .cwp-image a:before {
+	content: "";
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background: url(../images/play.svg) no-repeat center center;
+	top: 0;
+	left: 0;
+}

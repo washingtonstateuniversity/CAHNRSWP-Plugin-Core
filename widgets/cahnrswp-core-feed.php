@@ -31,7 +31,7 @@ class CAHNRSWP_Core_Feed extends WP_Widget {
 		
 		if( !isset( $instance['display'] ) ) $instance['display'] = 'promo';
 		
-		$posts = apply_filters( 'cwp_core_feed_post' , array() );
+		$posts = apply_filters( 'cwp_core_feed_post' , array() , $instance );
 		
 		if( !$posts ){
 		
