@@ -3,3 +3,6 @@ Filter Hooks:
 cwp_get_post_types
 Filter custom post type list.
 array post_type_id => post_type_name.
+
+cwp_core_feed_insert_post 
+Filter Insert Post widget prior to query

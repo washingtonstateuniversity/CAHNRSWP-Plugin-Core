@@ -20,7 +20,7 @@ class CAHNRSWP_Core {
 	
 	public static function get_instance(){
 		
-		if( null == self::$instance ) {
+		if ( null == self::$instance ) {
 			self::$instance = new self;
 		} // end if
 		
@@ -41,13 +41,47 @@ class CAHNRSWP_Core {
 		
 		add_action( 'wp_enqueue_scripts', array( $this, 'cwp_enqueue_scripts' ), 20 );
 		
+		add_action( 'init', array( $this , 'cwp_init' ) );
+		
+		add_action( 'edit_form_after_title', array( $this ,'cwp_edit_form_after_title' ) );
+		
+		add_action( 'save_post' , array( $this , 'cwp_save_post' ) );
+		
 	} // end constructor
+	
+	/**
+	 * @desc Actions initiated by add_action( init , ... 
+	*/
+	public function cwp_init(){
+		
+		$this->cwp_register_post_types();
+		
+	} // end cwp_init
+	
+	/*
+	 * @desc Add actions from edit_form_after_title
+	*/
+	public function cwp_edit_form_after_title() {
+		
+		global $post;
+		
+		if ( 'news_item' == $post->post_type ){
+			
+			require_once CAHNRSWPCOREDIR . 'classes/class-cahnrs-core-news-item.php';
+			
+			$news_data = new CAHNRSWP_Core_News_Item( $post );
+			
+			include 'inc/inc-editor-form-news-item.php';
+			
+		}; // end if
+		
+	} // end cwp_edit_form_after_title
 	
 	public function cwp_enqueue_scripts() {
 		
 		wp_enqueue_style( 'cahnrswp-core', CAHNRSWPCOREURL . '/css/cahnrswp-core.css' , array(), '0.0.1', false );
 		
-	}
+	} // cwp_enqueue_scripts
 	
 	public function cwp_register_widgets(){
 		
@@ -55,7 +89,94 @@ class CAHNRSWP_Core {
 		
 		register_widget( 'CAHNRSWP_Core_Feed' );
 		
+		/*require_once CAHNRSWPCOREDIR.'widgets/cahnrswp-core-related-links.php';
+		
+		register_widget( 'CAHNRSWP_Core_Related_Links' );*/
+		
+		require_once CAHNRSWPCOREDIR.'widgets/cahnrswp-core-insert-post.php';
+		
+		register_widget( 'CAHNRSWP_Core_Insert_Post' );
+		
 	}
+	
+	/*
+	 * @desc Register custom post types
+	*/
+	private function cwp_register_post_types(){
+		
+		$news_labels = array(
+			'name'          => 'News Items',
+			'singular_name' => 'News Item',
+		);
+		
+		$news_args = array(
+			'public'      => true,
+			'labels'       => $news_labels,
+			'has_archive' => true,
+			'rewrite'     => array( 'slug' => 'news' ),
+			'supports'    => array( 'title', 'editor', 'author', 'thumbnail', 'comments', ),
+		);
+		
+		register_post_type( 'news_item', $news_args );
+		
+	}
+	
+	public function cwp_save_post( $post_id ){
+		
+		if ( ! isset( $_POST['cahnrs_core_nonce'] ) ) return;
+		
+		if ( ! wp_verify_nonce( $_POST['cahnrs_core_nonce'], 'submit_cahnrs_core' ) ) return;
+		
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
+		
+		if ( ! current_user_can( 'edit_post', $post_id ) ) return;
+		
+		$keys = array( 
+			'_news_item' => 'text' 
+			);
+		
+		foreach ( $keys as $key => $type ){
+			
+			$clean = 'undefined';
+			
+			if ( isset( $_POST[ $key ] ) ){
+				
+				$value = $_POST[ $key ];
+				
+				if ( 'text' == $type ) {
+					
+					if ( is_array( $value ) ){
+							
+							if( 
+								array_walk_recursive( 
+									&$value , 
+									function( &$data , $index ){ $data = sanitize_text_field( $data );} 
+								)
+							) {
+								
+								$clean = $value;
+								
+							} // end if
+						
+					} else {
+						
+						$clean = sanitize_text_field( $value ); 
+						
+					}; // end if
+					
+				}; // end if text
+				
+			}; // end if
+			
+			if ( 'undefined' != $clean ){
+				
+				update_post_meta( $post_id , $key , $clean );
+				
+			}; // end if
+			
+		} // end foreach
+		
+	} // end cwp_save_post
 	
 } // end class CAHNRSWP_Core
 
@@ -81,10 +202,10 @@ class CAHNRWP_Core_Form {
 		
 		
 		
-		foreach( $registered_types as $post_typeid => $post_type ){
+		foreach ( $registered_types as $post_typeid => $post_type ){
 			
 			
-			if ( !in_array( $post_typeid , $exclude ) ) {
+			if ( ! in_array( $post_typeid , $exclude ) ) {
 				
 				$post_types[ $post_typeid ] = $post_type->name;
 				
@@ -98,9 +219,9 @@ class CAHNRWP_Core_Form {
 	
 	public function cwp_set_defaults( $defaults , &$instance ){
 		
-		foreach( $defaults as $default_key => $default_value ){
+		foreach ( $defaults as $default_key => $default_value ){
 			
-			if( !isset( $instance[ $default_key ] ) ){
+			if ( ! isset( $instance[ $default_key ] ) ){
 				
 				$instance[ $default_key ] = $default_value;
 				
@@ -118,13 +239,19 @@ class CAHNRWP_Core_Query {
 		
 		$query = array();
 		
-		if( isset( $instance['post_type'] ) ) {
+		if ( isset( $instance['post_type'] ) ) {
 			
 			$query['post_type'] = $instance['post_type'];
 			
 		};
 		
-		if( isset( $instance['tax_query'] ) && isset( $instance['tax_terms'] ) && $instance['tax_terms'] ){
+		if ( isset( $instance['p'] ) ) {
+			
+			$query['post_in'][] = $instance['p'];
+			
+		};
+		
+		if ( isset( $instance['tax_query'] ) && isset( $instance['tax_terms'] ) && $instance['tax_terms'] ){
 			
 			$query['tax_query'] = array(
 				array(
@@ -136,9 +263,9 @@ class CAHNRWP_Core_Query {
 				
 		};
 		
-		if( isset( $instance['posts_per_page'] ) ) {
+		if ( isset( $instance['posts_per_page'] ) ) {
 			
-			if( 'all' == $instance['posts_per_page'] ) $instance['posts_per_page'] = -1;
+			if ( 'all' == $instance['posts_per_page'] ) $instance['posts_per_page'] = -1;
 			
 			$query['posts_per_page'] = $instance['posts_per_page'];
 			
@@ -155,7 +282,7 @@ class CAHNRWP_Core_Post {
 		
 		$post_obj = new stdClass();
 		
-		if( isset( $post->post_type ) ){
+		if ( isset( $post->post_type ) ){
 		
 			$post_obj->content_type = $post->post_type;
 			
@@ -176,7 +303,7 @@ class CAHNRWP_Core_Post {
 		
 		$post_obj->post_date = get_the_date();
 		
-		if( has_post_thumbnail() ){
+		if ( has_post_thumbnail() ){
 			
 			$post_obj->img = get_the_post_thumbnail( $post_id, 'thumbnail' );
 			
@@ -188,11 +315,11 @@ class CAHNRWP_Core_Post {
 	
 	public static function cwp_post_obj_advanced( &$post , $instance ){
 		
-		if( isset( $instance['no_link'] ) && $instance['no_link'] ) unset( $post->link ); 
+		if ( isset( $instance['no_link'] ) && $instance['no_link'] ) unset( $post->link ); 
 		
-		if( isset( $instance['no_title'] ) && $instance['no_title'] ) unset( $post->title );
+		if ( isset( $instance['no_title'] ) && $instance['no_title'] ) unset( $post->title );
 		
-		if( isset( $instance['no_text'] ) && $instance['no_text'] ) {
+		if ( isset( $instance['no_text'] ) && $instance['no_text'] ) {
 			
 			unset( $post->content );
 			
@@ -200,19 +327,19 @@ class CAHNRWP_Core_Post {
 			
 		};
 		
-		if( isset( $instance['show_content'] ) && $instance['show_content'] ) {
+		if ( isset( $instance['show_content'] ) && $instance['show_content'] ) {
 			
 			$post->excerpt = $post->content;
 			
 		};
 		
-		if( !isset( $instance['show_date'] ) || !$instance['show_date'] ) {
+		if ( ! isset( $instance['show_date'] ) || ! $instance['show_date'] ) {
 			
 			unset( $post->post_date );
 			
 		}; 
 		
-		if( !isset( $instance['show_author'] ) || !$instance['show_author'] ) {
+		if ( ! isset( $instance['show_author'] ) || ! $instance['show_author'] ) {
 			
 			unset( $post->author );
 			
@@ -226,7 +353,7 @@ class CAHNRWP_Core_Display {
 	
 	public static function cwp_display_post( $post , $display = 'promo' ){
 		
-		 switch( $display ){
+		 switch ( $display ){
 			 
 			case 'list':
 			 	break;
@@ -236,6 +363,7 @@ class CAHNRWP_Core_Display {
 				break;
 				
 			case 'full':
+				include CAHNRSWPCOREDIR . 'inc/inc-display-full.php';
 				break;
 				
 			case 'promo':

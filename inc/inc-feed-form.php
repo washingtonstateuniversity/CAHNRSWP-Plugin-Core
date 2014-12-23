@@ -7,11 +7,7 @@
 	if( !isset( $instance['display'] ) ) $instance['display'] = 'promo';
 ;?>
 <div class="cwp-form">
-	<div class="cwp-form-section">
-    	<p>
-	<input class="widefat" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $instance['title'] ); ?>">
-    	</p>
-    </div>
+	<?php include CAHNRSWPCOREDIR . '/inc/inc-form-title.php'; ?>
 	<div class="cwp-form-section">
     	<a href="#" class="cwp-form-section-title">
         	Basic Settings
