@@ -61,9 +61,9 @@ class CAHNRSWP_Core_Feed extends WP_Widget {
 			
 			foreach( $posts as $post ){
 				
-				CAHNRWP_Core_Post::cwp_post_obj_advanced( $post_obj , $instance );
+				CAHNRWP_Core_Post::cwp_post_obj_advanced( $post , $instance );
 				
-				CAHNRWP_Core_Display::cwp_display_post( $post , $instance['display'] );
+				CAHNRWP_Core_Display::cwp_display_post( $post , $instance );
 				
 			}; // end foreach
 			

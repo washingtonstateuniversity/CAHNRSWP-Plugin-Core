@@ -22,3 +22,11 @@
 	top: 0;
 	left: 0;
 }
+/**
+ * CSS Hooks
+ *
+*/
+.border-top-white {
+	border-top: 1px solid #fff;
+}
+ 

@@ -1,22 +1,8 @@
 <?php
 
-$p = '<div class="cwp-full' . $post->content_type . '" >';
+$p = '<div class="cwp-full' . $post->content_type . ' ' . CAHNRWP_Core_Display::cwp_display_post_css( $instance ) . '" >';
 
 	$p .= '<div class="cwp-content">';
-	
-		if( isset( $post->title ) ){
-	
-			$p .= '<h2>';
-			
-				$p .= $post_link;
-			  
-				$p .= $post->title;
-				
-				$p .= $post_link_end; 
-			 
-			$p .= '</h2>';
-		
-		}; // end if
 		
 		if( isset( $post->post_date ) || isset( $post->author ) ){
 				

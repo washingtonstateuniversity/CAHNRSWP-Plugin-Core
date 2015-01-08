@@ -37,9 +37,13 @@ class CAHNRSWP_Core {
 		
 		define( 'CAHNRSWPCOREDIR' , plugin_dir_path( __FILE__ ) ); // Plugin Directory Path
 		
+		$this->cwp_add_video_support();
+		
 		add_action( 'widgets_init', array( $this , 'cwp_register_widgets') );
 		
 		add_action( 'wp_enqueue_scripts', array( $this, 'cwp_enqueue_scripts' ), 20 );
+		
+		add_action( 'admin_enqueue_scripts', array( $this, 'cwp_admin_enqueue_scripts' ), 20 );
 		
 		add_action( 'init', array( $this , 'cwp_init' ) );
 		
@@ -48,6 +52,17 @@ class CAHNRSWP_Core {
 		add_action( 'save_post' , array( $this , 'cwp_save_post' ) );
 		
 	} // end constructor
+	
+	/*
+	 * @desc Adds video support to theme
+	*/ 
+	public function cwp_add_video_support(){
+		
+		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-video.php';
+		
+		$cwp_videos = new CAHNRSWP_Core_Video();
+		
+	} // end cwp_add_video_support
 	
 	/**
 	 * @desc Actions initiated by add_action( init , ... 
@@ -80,6 +95,12 @@ class CAHNRSWP_Core {
 	public function cwp_enqueue_scripts() {
 		
 		wp_enqueue_style( 'cahnrswp-core', CAHNRSWPCOREURL . '/css/cahnrswp-core.css' , array(), '0.0.1', false );
+		
+	} // cwp_enqueue_scripts
+	
+	public function cwp_admin_enqueue_scripts() {
+		
+		wp_enqueue_style( 'cahnrswp-core-admin', CAHNRSWPCOREURL . '/css/cahnrswp-core-admin.css' , array(), '0.0.1', false );
 		
 	} // cwp_enqueue_scripts
 	
@@ -245,9 +266,12 @@ class CAHNRWP_Core_Query {
 			
 		};
 		
-		if ( isset( $instance['p'] ) ) {
+		if ( isset( $instance['post__in'] ) ) {
 			
-			$query['post_in'][] = $instance['p'];
+			/*$query['post_in'][] = $instance['p'];*/
+			$query['post__in'][] = $instance['post__in'];
+			
+			$query['order_by'][] = 'post__in';
 			
 		};
 		
@@ -351,9 +375,11 @@ class CAHNRWP_Core_Post {
 
 class CAHNRWP_Core_Display {
 	
-	public static function cwp_display_post( $post , $display = 'promo' ){
+	public static function cwp_display_post( $post , $instance = array() ){
 		
-		 switch ( $display ){
+		if( ! isset( $instance['display'] ) ) $instance['display'] = 'promo';
+		
+		switch ( $instance['display'] ){
 			 
 			case 'list':
 			 	break;
@@ -365,6 +391,9 @@ class CAHNRWP_Core_Display {
 			case 'full':
 				include CAHNRSWPCOREDIR . 'inc/inc-display-full.php';
 				break;
+			case 'accordion':
+				include CAHNRSWPCOREDIR . 'inc/inc-display-accordion.php';
+				break;
 				
 			case 'promo':
 			default:
@@ -372,6 +401,45 @@ class CAHNRWP_Core_Display {
 				break;
 			 
 		 };
+	} // end cwp_display_post
+	
+	public static function cwp_display_post_css( $instance ){
+		
+		$class = array();
+		
+		if( isset( $instance['css_hook'] ) && $instance['css_hook'] ){
+			
+			$class[] = $instance['css_hook'];
+			
+		}; // end if
+		
+		if( isset( $instance['display_advanced'] ) && $instance['display_advanced'] ){
+			
+			$class[] = $instance['display_advanced'];
+			
+		}; // end if
+		
+		return implode( ' ', $class );
+	}
+	
+	public static function cwp_display_js( $instance ){
+		
+		$has_js = array( 'accordion' );
+		
+		if( isset( $instance['display'] ) && in_array( $instance['display'] , $has_js ) ){
+			
+			ob_start();
+			
+			include CAHNRSWPCOREDIR . 'js/' . $instance['display'] . '.php'; 
+			
+			return '<script>' . ob_get_clean() . '</script>';
+			
+		} else {
+			
+			return '';
+			
+		}
+
 	}
 	
 } // end CAHNRWP_Core_Post

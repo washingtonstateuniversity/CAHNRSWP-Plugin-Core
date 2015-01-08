@@ -12,7 +12,7 @@
         </a>
         <div class="cwp-form-section-content">
         	<p>
-            	<input type="text" name="<?php echo $this->get_field_name( 'p' ); ?>" value="<?php echo $instance['p'];?>" />
+            	<input type="text" name="<?php echo $this->get_field_name( 'post__in' ); ?>" value="<?php echo $instance['post__in'];?>" />
                 <input type="hidden" name="<?php echo $this->get_field_name( 'post_type' ); ?>" value="any" />
                 <input type="hidden" name="<?php echo $this->get_field_name( 'posts_per_page' ); ?>" value="1" />
         	</p>
@@ -23,6 +23,7 @@
                     <option value="promo" <?php selected( $instance['display'] , 'promo' );?> >Promo</option>
                     <option value="promo-gallery" <?php selected( $instance['display'] , 'promo-gallery' );?> >Gallery Style</option>
                     <option value="full" <?php selected( $instance['display'] , 'full' );?> >Full Content</option>
+                    <option value="accordion" <?php selected( $instance['display'] , 'accordion' );?> >Accordion</option>
                 </select>
             </p>
         </div>
