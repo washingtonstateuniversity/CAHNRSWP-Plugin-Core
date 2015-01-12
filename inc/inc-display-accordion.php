@@ -4,7 +4,7 @@ $post_link = ( isset( $post->link ) )? '<a href="' . $post->link . '" >' : '';
 
 $post_link_end = ( isset( $post->link ) )? '</a>' : '';
 
-$p = '<div class="cwp-accordion ' . $post->content_type . ' ' . CAHNRWP_Core_Display::cwp_display_post_css( $instance ) . '" >';
+$p = '<div class="cwp-accordion ' . $post->content_type . ' ' . $this->cwp_display_post_css( $instance ) . '" >';
 
 	if( isset( $post->title ) ){
 	

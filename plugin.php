@@ -94,6 +94,8 @@ class CAHNRSWP_Core {
 	
 	public function cwp_enqueue_scripts() {
 		
+		wp_enqueue_script( 'cycle2', CAHNRSWPCOREURL . '/js/cycle2.js' , array(), '0.0.1', false );
+		
 		wp_enqueue_style( 'cahnrswp-core', CAHNRSWPCOREURL . '/css/cahnrswp-core.css' , array(), '0.0.1', false );
 		
 	} // cwp_enqueue_scripts
@@ -117,6 +119,10 @@ class CAHNRSWP_Core {
 		require_once CAHNRSWPCOREDIR.'widgets/cahnrswp-core-insert-post.php';
 		
 		register_widget( 'CAHNRSWP_Core_Insert_Post' );
+		
+		require_once CAHNRSWPCOREDIR.'widgets/cahnrswp-core-slider.php';
+		
+		register_widget( 'CAHNRSWP_Core_Slider' );
 		
 	}
 	
@@ -253,195 +259,5 @@ class CAHNRWP_Core_Form {
 	} // end cwp_set_defaults
 	
 } // end CAHNRWP_Core_Form
-
-class CAHNRWP_Core_Query {
-	
-	public static function cwp_get_local_query( $instance ){
-		
-		$query = array();
-		
-		if ( isset( $instance['post_type'] ) ) {
-			
-			$query['post_type'] = $instance['post_type'];
-			
-		};
-		
-		if ( isset( $instance['post__in'] ) ) {
-			
-			/*$query['post_in'][] = $instance['p'];*/
-			$query['post__in'][] = $instance['post__in'];
-			
-			$query['order_by'][] = 'post__in';
-			
-		};
-		
-		if ( isset( $instance['tax_query'] ) && isset( $instance['tax_terms'] ) && $instance['tax_terms'] ){
-			
-			$query['tax_query'] = array(
-				array(
-					'taxonomy' => $instance['tax_query'],
-					'field'    => 'name',
-					'terms'    => explode( ',' , $instance['tax_terms'] ),
-					),
-			);
-				
-		};
-		
-		if ( isset( $instance['posts_per_page'] ) ) {
-			
-			if ( 'all' == $instance['posts_per_page'] ) $instance['posts_per_page'] = -1;
-			
-			$query['posts_per_page'] = $instance['posts_per_page'];
-			
-		}; 
-		
-		return $query;
-		
-	}
-} // end CAHNRWP_Core_Query
-
-class CAHNRWP_Core_Post {
-	
-	public static function cwp_get_loop_post_obj( $post ){
-		
-		$post_obj = new stdClass();
-		
-		if ( isset( $post->post_type ) ){
-		
-			$post_obj->content_type = $post->post_type;
-			
-		} else {
-			
-			$post_obj->content_type = '';
-		};
-			
-		$post_obj->title = get_the_title();
-			
-		$post_obj->content = get_the_content();
-			
-		$post_obj->excerpt = get_the_excerpt();
-		
-		$post_obj->link = get_permalink();
-		
-		$post_obj->author = get_the_author();
-		
-		$post_obj->post_date = get_the_date();
-		
-		if ( has_post_thumbnail() ){
-			
-			$post_obj->img = get_the_post_thumbnail( $post_id, 'thumbnail' );
-			
-		}
-		
-		return $post_obj;
-		
-	} // end cwp_get_loop_post_obj
-	
-	public static function cwp_post_obj_advanced( &$post , $instance ){
-		
-		if ( isset( $instance['no_link'] ) && $instance['no_link'] ) unset( $post->link ); 
-		
-		if ( isset( $instance['no_title'] ) && $instance['no_title'] ) unset( $post->title );
-		
-		if ( isset( $instance['no_text'] ) && $instance['no_text'] ) {
-			
-			unset( $post->content );
-			
-			unset( $post->excerpt );
-			
-		};
-		
-		if ( isset( $instance['show_content'] ) && $instance['show_content'] ) {
-			
-			$post->excerpt = $post->content;
-			
-		};
-		
-		if ( ! isset( $instance['show_date'] ) || ! $instance['show_date'] ) {
-			
-			unset( $post->post_date );
-			
-		}; 
-		
-		if ( ! isset( $instance['show_author'] ) || ! $instance['show_author'] ) {
-			
-			unset( $post->author );
-			
-		}; 
-		 		
-	}
-	
-} // end CAHNRWP_Core_Post
-
-class CAHNRWP_Core_Display {
-	
-	public static function cwp_display_post( $post , $instance = array() ){
-		
-		if( ! isset( $instance['display'] ) ) $instance['display'] = 'promo';
-		
-		switch ( $instance['display'] ){
-			 
-			case 'list':
-			 	break;
-				
-			case 'promo-gallery':
-				include CAHNRSWPCOREDIR . 'inc/inc-display-gallery.php';
-				break;
-				
-			case 'full':
-				include CAHNRSWPCOREDIR . 'inc/inc-display-full.php';
-				break;
-			case 'accordion':
-				include CAHNRSWPCOREDIR . 'inc/inc-display-accordion.php';
-				break;
-				
-			case 'promo':
-			default:
-				include CAHNRSWPCOREDIR . 'inc/inc-display-promo.php';
-				break;
-			 
-		 };
-	} // end cwp_display_post
-	
-	public static function cwp_display_post_css( $instance ){
-		
-		$class = array();
-		
-		if( isset( $instance['css_hook'] ) && $instance['css_hook'] ){
-			
-			$class[] = $instance['css_hook'];
-			
-		}; // end if
-		
-		if( isset( $instance['display_advanced'] ) && $instance['display_advanced'] ){
-			
-			$class[] = $instance['display_advanced'];
-			
-		}; // end if
-		
-		return implode( ' ', $class );
-	}
-	
-	public static function cwp_display_js( $instance ){
-		
-		$has_js = array( 'accordion' );
-		
-		if( isset( $instance['display'] ) && in_array( $instance['display'] , $has_js ) ){
-			
-			ob_start();
-			
-			include CAHNRSWPCOREDIR . 'js/' . $instance['display'] . '.php'; 
-			
-			return '<script>' . ob_get_clean() . '</script>';
-			
-		} else {
-			
-			return '';
-			
-		}
-
-	}
-	
-} // end CAHNRWP_Core_Post
 
 

@@ -1,6 +1,6 @@
 <?php
 
-$p = '<div class="cwp-full' . $post->content_type . ' ' . CAHNRWP_Core_Display::cwp_display_post_css( $instance ) . '" >';
+$p = '<div class="cwp-full' . $post->content_type . ' ' . $this->cwp_display_post_css( $instance , $post ) . '" >';
 
 	$p .= '<div class="cwp-content">';
 		

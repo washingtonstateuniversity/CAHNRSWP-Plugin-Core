@@ -1,5 +1,5 @@
 <?php
-class CAHNRSWP_Core_Feed extends WP_Widget {
+class CAHNRSWP_Core_Slider extends WP_Widget {
 
 	/**
 	 * Sets up the widgets name etc
@@ -7,11 +7,11 @@ class CAHNRSWP_Core_Feed extends WP_Widget {
 	public function __construct() {
 		
 		parent::__construct(
-			'cahnrswp_feed', // Base ID
-			'Feed', // Name
-			array( 'description' => 'Feed Content ', ) // Args
+			'cahnrswp_slider', // Base ID
+			'Slider Feed', // Name
+			array( 'description' => 'Feed content in a dynamic slider.', ) // Args
 		);
-	}
+	} // end method __construct
 	
 	/*
 	 * @desc - Sets default values for the widget
@@ -27,9 +27,13 @@ class CAHNRSWP_Core_Feed extends WP_Widget {
 		
 		if( !isset( $instance['tax_terms'] ) ) $instance['tax_terms'] = '';
 		
-		if( !isset( $instance['posts_per_page'] ) ) $instance['posts_per_page'] = 3;
+		if( !isset( $instance['slide_count'] ) ) $instance['slide_count'] = 3;
 		
-		if( !isset( $instance['display'] ) ) $instance['display'] = 'promo';
+		if( !isset( $instance['display'] ) ) $instance['display'] = 'promo-gallery';
+		
+		if( !isset( $instance['visible'] ) ) $instance['visible'] = 4;
+		
+		$instance['posts_per_page'] = $instance['slide_count'] * $instance['visible'];
 		
 	}
 
@@ -43,27 +47,41 @@ class CAHNRSWP_Core_Feed extends WP_Widget {
 		
 		$this->widget_defaults( $instance );
 		
+		$slider_id = rand( 100, 10000000 );
+		
 		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-query-posts.php';
 			
 		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-post-display.php';
 		
 		$cwp_query_posts = new CAHNRWP_Core_Query_Posts();
 			
-		$cwp_display_posts = new CAHNRSWP_Core_Post_Display();
+		$cwp_display_posts = new CAHNRSWP_Core_Post_display();
 		
 		echo $args['before_widget'];
 		
-		if( isset( $instance['title'] ) && $instance['title'] ){
-			
-			echo '<h3>' . $instance['title'] . '</h3>';
-			
-		}
+		echo '<div class="cwp-slider slider-' . $instance['visible'] . '-visible" >';
 		
-		if( !isset( $instance['display'] ) ) $instance['display'] = 'promo';
+		if ( $instance['title'] ){
+			
+			echo '<h2 class="cwp-widget-title">' . $instance['title'] . '</h2>';
+			
+		}; // end if
+		
+		echo '<a href="#" id="cycle-prev-' .$slider_id . '" class="cycle-prev"></a>';
+			
+		echo '<div class="cycle-pager" id="pager-' .$slider_id . '"></div>';
+		
+		echo '<a href="#" id="cycle-next-' .$slider_id . '" class="cycle-next"></a>';
 		
 		$posts = apply_filters( 'cwp_core_feed_post' , array() , $instance );
 		
-		if( !$posts ){
+		/*
+		 * Check if a set of posts already exist from cwp_core_feed_post. 
+		 * If the filter returns a set of posts skip the query
+		 * section below.
+		*/
+		
+		if ( ! $posts ){
 		
 			$query_args = $cwp_query_posts->cwp_get_local_query( $instance );
 			
@@ -73,7 +91,7 @@ class CAHNRSWP_Core_Feed extends WP_Widget {
 	
 				while ( $the_query->have_posts() ) {
 					
-					$the_query->the_post();
+					$the_query->the_post(); 
 					
 					$posts[] = $cwp_query_posts->cwp_get_loop_post_obj( $the_query->post , $instance );
 									
@@ -87,17 +105,54 @@ class CAHNRSWP_Core_Feed extends WP_Widget {
 		
 		if ( $posts ) {
 			
-			foreach( $posts as $post ){
+			$slider_data = array(
+				'data-cycle-fx=scrollHorz',
+				'data-cycle-timeout=0',
+				//'data-cycle-carousel-visible=' . $instance['visible'],
+				'data-cycle-slides="> div"',
+				//'data-cycle-carousel-fluid=true',
+				'data-cycle-prev="#cycle-prev-' .$slider_id . '"',
+        		'data-cycle-next="#cycle-next-' .$slider_id . '"',
+				'data-cycle-pager="#pager-' .$slider_id . '"',
+			);
+			
+			echo '<div class="cwp-slider-wrap cycle-slideshow" ' . implode( ' ', $slider_data )  . '>';
+			
+			$slide_index = 0;
+			
+			foreach( $posts as $post_index => $post ){
+				
+				if( 0 === $slide_index ) {
+					
+					echo '<div class="cwp-slide">';
+					
+				};
+				
+				$post->index = $post_index;
 				
 				$cwp_query_posts->cwp_post_obj_advanced( $post , $instance );
 				
 				$cwp_display_posts->cwp_display_post( $post , $instance );
 				
+				if( ( $instance['visible'] - 1 ) === $slide_index || count( $posts ) == ( $post_index + 1 ) ) {
+					
+					echo '</div>';
+					
+					$slide_index = 0;
+					
+				} else {
+					
+					$slide_index++;
+					
+				}; // end if
+				
 			}; // end foreach
+			
+			echo '</div>';
 			
 		} // end if
 		
-		include CAHNRSWPCOREDIR . '/inc/inc-display-more-link.php';
+		echo '</div>';
 		
 		echo $args['after_widget'];
 		
@@ -116,7 +171,7 @@ class CAHNRSWP_Core_Feed extends WP_Widget {
 		
 		$post_types = $cwp_form->cwp_get_post_types();
 		
-		include CAHNRSWPCOREDIR . '/inc/inc-feed-form.php';
+		include CAHNRSWPCOREDIR . '/inc/inc-form-slider-feed.php';
 		
 	}
 

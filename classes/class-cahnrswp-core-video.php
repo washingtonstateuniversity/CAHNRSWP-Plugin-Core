@@ -64,10 +64,14 @@ class CAHNRSWP_Core_Video {
 	*/
 	public function cwp_video_editor( $post ){
 		
-		$this->video_model->cwp_set_video_props_from_meta( $post );
+		if ( 'video' == $post->post_type ) {
 		
-		$this->video_view->output_settings();
+			$this->video_model->cwp_set_video_props_from_meta( $post );
+			
+			$this->video_view->output_settings();
+			
+		}; // end if
 		
-	} // end cwp_video_editor
+	} // end method cwp_video_editor
 	
 }

@@ -22,7 +22,16 @@
                 <input type="text" name="<?php echo $this->get_field_name( 'tax_terms' ); ?>" value="<?php echo $instance['tax_terms']; ?>" />
             </p>
             <p>
-            	<label>Count: </label><input type="text" name="<?php echo $this->get_field_name( 'posts_per_page' ); ?>" value="<?php echo $instance['posts_per_page']; ?>" />
+            
+            
+            	<label># Visible: </label>
+                <select name="<?php echo $this->get_field_name( 'visible' ); ?>">
+                	<option value="1" <?php selected( $instance['visible'] , 1 );?> >1</option>
+                    <option value="2" <?php selected( $instance['visible'] , 2 );?> >2</option>
+                    <option value="3" <?php selected( $instance['visible'] , 3 );?> >3</option>
+                    <option value="4" <?php selected( $instance['visible'] , 4 );?> >4</option>
+                    <option value="5" <?php selected( $instance['visible'] , 5 );?> >5</option>
+                </select>
             </p>
             <p>
             	<label>display As: </label>
@@ -32,6 +41,13 @@
                     <option value="promo-gallery" <?php selected( $instance['display'] , 'promo-gallery' );?> >Gallery Style</option>
                     <option value="full" <?php selected( $instance['display'] , 'full' );?> >Full Content</option>
                 </select>
+            </p>
+            <p>
+            	
+                
+                
+                <label># of Slides : </label><input type="text" name="<?php echo $this->get_field_name( 'slide_count' ); ?>" value="<?php echo $instance['slide_count']; ?>" />
+           
             </p>
         </div>
     </div>

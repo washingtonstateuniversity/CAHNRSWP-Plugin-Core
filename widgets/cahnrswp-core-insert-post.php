@@ -21,6 +21,14 @@ class CAHNRSWP_Core_Insert_Post extends WP_Widget {
 	 */
 	public function widget( $args, $instance ) {
 		
+		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-query-posts.php';
+			
+		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-post-display.php';
+		
+		$cwp_query_posts = new CAHNRWP_Core_Query_Posts();
+		
+		$cwp_display_posts = new CAHNRSWP_Core_Post_display();
+		
 		echo $args['before_widget'];
 		
 		if( isset( $instance['title'] ) && $instance['title'] ){
@@ -29,15 +37,15 @@ class CAHNRSWP_Core_Insert_Post extends WP_Widget {
 			
 		}
 		
-		if( !isset( $instance['display'] ) ) $instance['display'] = 'promo';
+		if ( ! isset( $instance['display'] ) ) $instance['display'] = 'promo';
 		
 		$insert_post = apply_filters( 'cwp_core_feed_insert_post' , array() , $instance );
 		
-		if( !$insert_post ){
+		if ( ! $insert_post ){
 		
-			$query = CAHNRWP_Core_Query::cwp_get_local_query( $instance );
+			$query_args = $cwp_query_posts->cwp_get_local_query( $instance );
 			
-			$the_query = new WP_Query( $query );
+			$the_query = new WP_Query( $query_args );
 	
 			if ( $the_query->have_posts() ) {
 	
@@ -45,9 +53,7 @@ class CAHNRSWP_Core_Insert_Post extends WP_Widget {
 					
 					$the_query->the_post();
 					
-					$post_obj = CAHNRWP_Core_Post::cwp_get_loop_post_obj( $the_query->post , $instance );
-					
-					$insert_post[] = $post_obj;
+					$insert_post[] = $cwp_query_posts->cwp_get_loop_post_obj( $the_query->post , $instance );
 									
 				}; // end while
 				
@@ -63,9 +69,9 @@ class CAHNRSWP_Core_Insert_Post extends WP_Widget {
 			
 			foreach( $insert_post as $post ){
 				
-				CAHNRWP_Core_Post::cwp_post_obj_advanced( $post_obj , $instance );
+				$cwp_query_posts->cwp_post_obj_advanced( $post , $instance );
 				
-				CAHNRWP_Core_Display::cwp_display_post( $post , $instance );
+				$cwp_display_posts->cwp_display_post( $post , $instance );
 				
 			}; // end foreach
 			
@@ -75,7 +81,7 @@ class CAHNRSWP_Core_Insert_Post extends WP_Widget {
 		
 		echo $args['after_widget'];
 		
-		echo CAHNRWP_Core_Display::cwp_display_js( $instance );
+		echo $cwp_display_posts->cwp_display_js( $instance );
 		
 	}	
 
