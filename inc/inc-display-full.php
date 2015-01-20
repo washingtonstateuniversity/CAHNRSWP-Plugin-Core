@@ -1,28 +1,28 @@
 <?php
 
-$p = '<div class="cwp-full' . $post->content_type . ' ' . $this->cwp_display_post_css( $instance , $post ) . '" >';
+$p = '<div class="cwp-full' . $item->content_type . ' ' . CAHNRSWP_Core_Post_Display::cwp_display_post_css( $instance , $item ) . '" >';
 
 	$p .= '<div class="cwp-content">';
 		
-		if( isset( $post->post_date ) || isset( $post->author ) ){
+		if( isset( $item->post_date ) || isset( $item->author ) ){
 				
 			$p .= '<div class="cwp-post-meta">';
 	
-				if( isset( $post->post_date ) ) $p .= '<span class="cwp-post-date">' . $post->post_date . '</span>';
+				if( isset( $item->post_date ) ) $p .= '<span class="cwp-post-date">' . $item->post_date . '</span>';
 				
-				if( isset( $post->author ) ) $p .= '<span class="cwp-post-author">' . $post->author . '</span>';
+				if( isset( $item->author ) ) $p .= '<span class="cwp-post-author">' . $item->author . '</span>';
 			
 			$p .= '</div>';
 		
 		}; // end if
 
-		if( isset( $post->content ) ) {
+		if( isset( $item->content ) ) {
 			
-			$p .= $post->content;
+			$p .= $item->content;
 			
-		} else if( isset( $post->excerpt ) ){
+		} else if( isset( $item->excerpt ) ){
 			
-			$p .= $post->excerpt;
+			$p .= $item->excerpt;
 			
 		}; // end if
 	

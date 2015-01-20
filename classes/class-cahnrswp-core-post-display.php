@@ -6,7 +6,7 @@ class CAHNRSWP_Core_Post_Display {
 	 * $param object $post - Modified post object.
 	 * $param array $instance - Current item instance.
 	*/
-	public function cwp_display_post( $post , $instance = array() ){
+	public static function cwp_display_post( $item , $instance = array() ){
 		
 		if ( ! isset( $instance['display'] ) ) $instance['display'] = 'promo';
 			
@@ -16,7 +16,9 @@ class CAHNRSWP_Core_Post_Display {
 			 	break;
 				
 			case 'promo-gallery':
+				
 				include CAHNRSWPCOREDIR . 'inc/inc-display-gallery.php';
+				
 				break;
 				
 			case 'full':
@@ -34,7 +36,7 @@ class CAHNRSWP_Core_Post_Display {
 		 };
 	} // end cwp_display_post
 	
-	public function cwp_display_post_css( $instance , $post = 'na' ){
+	public static function cwp_display_post_css( $instance , $post = 'na' ){
 		
 		$class = array();
 		
@@ -61,7 +63,7 @@ class CAHNRSWP_Core_Post_Display {
 		return implode( ' ', $class );
 	}
 	
-	public function cwp_display_js( $instance ){
+	public static function cwp_display_js( $instance ){
 		
 		$has_js = array( 'accordion' );
 		
@@ -80,6 +82,38 @@ class CAHNRSWP_Core_Post_Display {
 		}
 
 	}
+	
+	public static function cwp_display_wrapper( $instance , $start = false ){
+		
+		$tag = '';
+		
+		if ( $start ){
+			
+			switch ( $instance['display'] ){
+				
+				case 'list' :
+				case 'promo-gallery' :
+					$tag = '<ul class="' . $instance['display'] . '" >';
+					break;
+				
+			}; // end switch
+			
+		} else {
+			
+			switch ( $instance['display'] ){
+				
+				case 'list' :
+				case 'promo-gallery' :
+					$tag = '</ul>';
+					break;
+					
+			}; // end switch
+			
+		} // end if
+		
+		return $tag;
+		
+	} // end method cwp_display_wrapper
 	
 	
 } // end CAHNRWP_Core_Post

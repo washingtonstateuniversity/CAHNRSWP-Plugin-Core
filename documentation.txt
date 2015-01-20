@@ -6,3 +6,7 @@ array post_type_id => post_type_name.
 
 cwp_core_feed_insert_post 
 Filter Insert Post widget prior to query
+
+cwp_core_get_post_obj
+Location: classes/class-cahnrswp-core-query-posts.php
+Filters the modified $post_object before returning it.

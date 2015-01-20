@@ -18,6 +18,14 @@ class CAHNRSWP_Core_Admin {
 		
 	} // end method cwp_save_post_meta
 	
+	protected function cwp_save_default_image( $post_id , $nonce , $nonce_action , $image_src ) {
+		
+		if( ! $this->cwp_check_perm( $nonce , $nonce_action ) ) return;
+		
+		update_post_meta( $post_id, '_default_img_src' , $image_src );
+		
+	} // end method cwp_save_default_image
+	
 	/*
 	 * @ desc - Checks if current user can save.
 	 * @return bool - TRUE if user can save, FALSE if not.

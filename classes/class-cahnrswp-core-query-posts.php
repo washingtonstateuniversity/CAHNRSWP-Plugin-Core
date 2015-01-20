@@ -80,17 +80,9 @@ class CAHNRWP_Core_Query_Posts {
 		
 		$post_obj->post_date = get_the_date();
 		
-		if ( has_post_thumbnail() ){
-			
-			$post_obj->img = get_the_post_thumbnail( $post->ID , 'thumbnail' );
-			
-			$thumbnail = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ) , 'medium' ); 
-			
-			$post_obj->img_src = $thumbnail[0];
-			
-		};
+		$post_obj->img = get_the_post_thumbnail( $post->ID , 'thumbnail' );
 		
-		return $post_obj;
+		return apply_filters( 'cwp_core_get_post_obj' , $post_obj , $post );
 		
 	} // end cwp_get_loop_post_obj
 	

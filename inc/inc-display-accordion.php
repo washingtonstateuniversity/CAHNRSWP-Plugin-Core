@@ -1,20 +1,20 @@
 <?php
 
-$post_link = ( isset( $post->link ) )? '<a href="' . $post->link . '" >' : '';
+$item_link = ( isset( $item->link ) )? '<a href="' . $item->link . '" >' : '';
 
-$post_link_end = ( isset( $post->link ) )? '</a>' : '';
+$item_link_end = ( isset( $item->link ) )? '</a>' : '';
 
-$p = '<div class="cwp-accordion ' . $post->content_type . ' ' . $this->cwp_display_post_css( $instance ) . '" >';
+$p = '<div class="cwp-accordion ' . $item->content_type . ' ' . CAHNRSWP_Core_Post_Display::cwp_display_post_css( $instance ) . '" >';
 
-	if( isset( $post->title ) ){
+	if( isset( $item->title ) ){
 	
 		$p .= '<h4>';
 		
-			$p .= $post_link;
+			$p .= $item_link;
 		  
-			$p .= $post->title;
+			$p .= $item->title;
 			
-			$p .= $post_link_end; 
+			$p .= $item_link_end; 
 		 
 		$p .= '</h4>';
 	
@@ -22,13 +22,13 @@ $p = '<div class="cwp-accordion ' . $post->content_type . ' ' . $this->cwp_displ
 	
 	$p .= '<div class="cwp-content" style="display: none">';	
 				
-		if ( isset( $post->content ) ){
+		if ( isset( $item->content ) ){
 	
-			$p .= $post->content;
+			$p .= $item->content;
 		
-		} else if ( isset( $post->excerpt ) ) {
+		} else if ( isset( $item->excerpt ) ) {
 			
-			$p .= $post->excerpt;
+			$p .= $item->excerpt;
 			
 		}; // end if
 	

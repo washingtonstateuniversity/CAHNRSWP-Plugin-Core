@@ -37,21 +37,76 @@ class CAHNRSWP_Core {
 		
 		define( 'CAHNRSWPCOREDIR' , plugin_dir_path( __FILE__ ) ); // Plugin Directory Path
 		
-		$this->cwp_add_video_support();
+		if ( is_admin() ) {
+		
+			require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-form-model.php'; 
+			
+			add_action( 'admin_enqueue_scripts', array( $this, 'cwp_admin_enqueue_scripts' ), 20 );
+			
+			add_action( 'edit_form_after_title', array( $this ,'cwp_edit_form_after_title' ) );
+			
+			add_action( 'save_post' , array( $this , 'cwp_save_post' ) );
+		
+		} else {
+			
+			require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-query.php';
+			
+			require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-post-display.php';
+			
+		}; // end if
 		
 		add_action( 'widgets_init', array( $this , 'cwp_register_widgets') );
 		
 		add_action( 'wp_enqueue_scripts', array( $this, 'cwp_enqueue_scripts' ), 20 );
 		
-		add_action( 'admin_enqueue_scripts', array( $this, 'cwp_admin_enqueue_scripts' ), 20 );
-		
 		add_action( 'init', array( $this , 'cwp_init' ) );
 		
-		add_action( 'edit_form_after_title', array( $this ,'cwp_edit_form_after_title' ) );
+		add_filter( 'post_thumbnail_html' , array( $this , 'cwp_post_thumbnail_html' ) , 20 , 5 );
 		
-		add_action( 'save_post' , array( $this , 'cwp_save_post' ) );
+		$this->cwp_add_video_support();
 		
 	} // end constructor
+	
+	/*
+	 * @desc
+	 * @param
+	*/
+	public function cwp_post_thumbnail_html( $html, $post_id, $post_thumbnail_id, $size, $attr ){
+		
+    	if ( empty( $html ) && $post_id ) {
+			
+        	$img_src = get_post_meta( $post_id , '_default_img_src' , true );
+			
+    	} else {
+			
+			/*
+			 * Instead of doing more calls to get the src, lets try and
+			 * pull it from the $html.
+			*/
+			preg_match('/src="(.*?)"/i', $html, $matches );
+			
+			if ( $matches ){
+				
+				$img_src = str_replace ( array( 'src="' , '"' ) , '' , $matches[0] );
+				
+			};
+		
+		}; // end if
+		
+		if ( ! empty( $img_src ) ){
+			
+			$html = '<img ';
+			
+			$html .= 'src="' . CAHNRSWPCOREURL . '/images/spacer4-3.png" ';
+			
+			$html .= 'style="background-image: url(' . $img_src . '); background-repeat: no-repeat; background-size: cover; background-position: center center; width: 100%; display: block;" ';
+			
+			$html .= ' />'; 
+			
+		};
+		
+    	return $html;
+	}
 	
 	/*
 	 * @desc Adds video support to theme
@@ -102,7 +157,9 @@ class CAHNRSWP_Core {
 	
 	public function cwp_admin_enqueue_scripts() {
 		
-		wp_enqueue_style( 'cahnrswp-core-admin', CAHNRSWPCOREURL . '/css/cahnrswp-core-admin.css' , array(), '0.0.1', false );
+		wp_enqueue_style( 'cahnrswp-core-admin-css', CAHNRSWPCOREURL . '/css/cahnrswp-core-admin.css' , array(), '0.0.1', false );
+		
+		wp_enqueue_script( 'cahnrswp-core-admin-js', CAHNRSWPCOREURL . '/js/admin.js' , array(), '0.0.1', false );
 		
 	} // cwp_enqueue_scripts
 	
@@ -123,6 +180,14 @@ class CAHNRSWP_Core {
 		require_once CAHNRSWPCOREDIR.'widgets/cahnrswp-core-slider.php';
 		
 		register_widget( 'CAHNRSWP_Core_Slider' );
+		
+		require_once CAHNRSWPCOREDIR.'widgets/cahnrswp-core-tabs.php';
+		
+		register_widget( 'CAHNRSWP_Core_Tabs' );
+		
+		require_once CAHNRSWPCOREDIR.'widgets/cahnrswp-core-content-feed.php';
+		
+		register_widget( 'CAHNRSWP_Core_Content_Feed' );
 		
 	}
 	

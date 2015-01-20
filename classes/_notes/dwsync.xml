@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dwsync>
 <file name="class-cahnrs-core-news-item.php" server="ftp.wpdev.cahnrs.wsu.edu//public_html/devsite.wpdev.cahnrs.wsu.edu/wp-content/plugins/CAHNRSWP-Plugin-Core/" local="130638332772433478" remote="130638368400000000" Dst="1" />
-<file name="class-cahnrswp-core-video-model.php" server="ftp.wpdev.cahnrs.wsu.edu//public_html/devsite.wpdev.cahnrs.wsu.edu/wp-content/plugins/CAHNRSWP-Plugin-Core/" local="130652120288590607" remote="130652155800000000" Dst="1" />
+<file name="class-cahnrswp-core-video-model.php" server="ftp.wpdev.cahnrs.wsu.edu//public_html/devsite.wpdev.cahnrs.wsu.edu/wp-content/plugins/CAHNRSWP-Plugin-Core/" local="130658951194796611" remote="130658950800000000" Dst="1" />
 <file name="class-cahnrswp-core-video-view.php" server="ftp.wpdev.cahnrs.wsu.edu//public_html/devsite.wpdev.cahnrs.wsu.edu/wp-content/plugins/CAHNRSWP-Plugin-Core/" local="130652106842323695" remote="130652142600000000" Dst="1" />
-<file name="class-cahnrswp-core-video.php" server="ftp.wpdev.cahnrs.wsu.edu//public_html/devsite.wpdev.cahnrs.wsu.edu/wp-content/plugins/CAHNRSWP-Plugin-Core/" local="130652874248038067" remote="130652910000000000" Dst="1" />
-<file name="class-cahnrswp-core-admin.php" server="ftp.wpdev.cahnrs.wsu.edu//public_html/devsite.wpdev.cahnrs.wsu.edu/wp-content/plugins/CAHNRSWP-Plugin-Core/" local="130651912647497397" remote="130651948200000000" Dst="1" />
-<file name="class-cahnrswp-core-query-posts.php" server="ftp.wpdev.cahnrs.wsu.edu//public_html/devsite.wpdev.cahnrs.wsu.edu/wp-content/plugins/CAHNRSWP-Plugin-Core/" local="130655543949916462" remote="130655579400000000" Dst="1" />
-<file name="class-cahnrswp-core-post-display.php" server="ftp.wpdev.cahnrs.wsu.edu//public_html/devsite.wpdev.cahnrs.wsu.edu/wp-content/plugins/CAHNRSWP-Plugin-Core/" local="130652327024225576" remote="130652362800000000" Dst="1" />
+<file name="class-cahnrswp-core-video.php" server="ftp.wpdev.cahnrs.wsu.edu//public_html/devsite.wpdev.cahnrs.wsu.edu/wp-content/plugins/CAHNRSWP-Plugin-Core/" local="130659040019384803" remote="130659039600000000" Dst="1" />
+<file name="class-cahnrswp-core-admin.php" server="ftp.wpdev.cahnrs.wsu.edu//public_html/devsite.wpdev.cahnrs.wsu.edu/wp-content/plugins/CAHNRSWP-Plugin-Core/" local="130658942654889767" remote="130658942400000000" Dst="1" />
+<file name="class-cahnrswp-core-query-posts.php" server="ftp.wpdev.cahnrs.wsu.edu//public_html/devsite.wpdev.cahnrs.wsu.edu/wp-content/plugins/CAHNRSWP-Plugin-Core/" local="130658956760789656" remote="130658956200000000" Dst="1" />
+<file name="class-cahnrswp-core-post-display.php" server="ftp.wpdev.cahnrs.wsu.edu//public_html/devsite.wpdev.cahnrs.wsu.edu/wp-content/plugins/CAHNRSWP-Plugin-Core/" local="130660684073555261" remote="130660683600000000" Dst="1" />
+<file name="class-cahnrswp-core-content-feed-model.php" server="ftp.wpdev.cahnrs.wsu.edu//public_html/devsite.wpdev.cahnrs.wsu.edu/wp-content/plugins/CAHNRSWP-Plugin-Core/" local="130660668683467630" remote="130660668600000000" Dst="1" />
+<file name="class-cahnrswp-core-form-model.php" server="ftp.wpdev.cahnrs.wsu.edu//public_html/devsite.wpdev.cahnrs.wsu.edu/wp-content/plugins/CAHNRSWP-Plugin-Core/" local="130660679819548784" remote="130660679400000000" Dst="1" />
+<file name="class-cahnrswp-core-query.php" server="ftp.wpdev.cahnrs.wsu.edu//public_html/devsite.wpdev.cahnrs.wsu.edu/wp-content/plugins/CAHNRSWP-Plugin-Core/" local="130660703313349559" remote="130660702800000000" Dst="1" />
+<file name="class-cahnrswp-core-slider-model.php" server="ftp.wpdev.cahnrs.wsu.edu//public_html/devsite.wpdev.cahnrs.wsu.edu/wp-content/plugins/CAHNRSWP-Plugin-Core/" local="130662241399182267" remote="130662241200000000" Dst="1" />
 </dwsync>

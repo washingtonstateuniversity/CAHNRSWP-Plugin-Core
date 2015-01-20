@@ -12,6 +12,8 @@ class CAHNRSWP_Core_Video_Model extends CAHNRSWP_Core_Admin {
 	
 	public $video_id = '';
 	
+	public $video_thumbnail = '';
+	
 	public $video_summary = '';
 	
 	public $video_copy = '';
@@ -57,7 +59,6 @@ class CAHNRSWP_Core_Video_Model extends CAHNRSWP_Core_Admin {
 			
 			if ( strpos( $this->video_url , '?v=' ) === false) {
 				
-				
 				$this->video_url = 'https://www.youtube.com/watch?v=' . $this->video_url;
 				
 			}; // end if
@@ -75,6 +76,18 @@ class CAHNRSWP_Core_Video_Model extends CAHNRSWP_Core_Admin {
 			}; // end if
 			
 		};// end if
+		
+		$default_image = get_post_meta( $post->ID , '_default_img_src' , true );
+		
+		if ( ! empty( $default_image ) ){
+			
+			$this->video_thumbnail = $default_image;
+			
+		} else if ( ! empty( $this->video_id ) ) {
+			
+			$this->video_thumbnail = '//img.youtube.com/vi/' . $this->video_id . '/mqdefault.jpg';
+			
+		}; // end if
 		
 		
 		if ( isset( $meta['video_related'] ) ){
@@ -112,9 +125,30 @@ class CAHNRSWP_Core_Video_Model extends CAHNRSWP_Core_Admin {
 			
 			$this->cwp_save_post_meta( $post_id , 'video' , 'add_video' , '_video' , $meta_data );
 			
+			if ( ! empty( $meta_data['video_url'] ) ){
+				
+				$video_id = $this->cwp_get_video_id_from_url( $meta_data['video_url'] );
+				
+				$video_img = '//img.youtube.com/vi/' . $video_id . '/mqdefault.jpg';
+				
+				$this->cwp_save_post_meta( $post_id , 'video' , 'add_video' , '_default_img_src' , $video_img );
+				
+			}; // end if
+			
 		} // end if
 		
 	} // end method cwp_save_video
+	
+	/*
+	 * @desc - Saves default images for videos
+	 * @param int $post_id
+	 * @param string $image_src
+	*/
+	public function cwp_save_image( $post_id , $image_src ){
+	
+		$this->cwp_save_default_image( $post_id , 'video' , 'add_video' , $image_src );
+		
+	} // end method cwp_save_image
 	
 	/*
 	 * @desc - Cleans $_POST input and sets appropriate model properties.
@@ -128,6 +162,16 @@ class CAHNRSWP_Core_Video_Model extends CAHNRSWP_Core_Admin {
 				$this->video_url = sanitize_text_field( $_POST['_video']['video_url'] );
 				
 				$this->video_id = $this->cwp_get_video_id_from_url( $this->video_url );
+				
+			}; // end if
+			
+			if ( ! empty( $_POST['_default_img_src'] ) ){
+				
+				$this->video_thumbnail = sanitize_text_field( $_POST['_default_img_src'] );
+				
+			} else {
+				
+				$this->video_thumbnail = '//img.youtube.com/vi/' . $this->video_id . '/mqdefault.jpg';
 				
 			}; // end if
 			

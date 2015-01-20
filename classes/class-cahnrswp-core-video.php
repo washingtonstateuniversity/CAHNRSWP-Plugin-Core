@@ -20,6 +20,8 @@ class CAHNRSWP_Core_Video {
 		add_action( 'edit_form_after_title' , array( $this , 'cwp_video_editor' ) );
 		
 		add_action( 'save_post_video' , array( $this, 'cwp_video_save' ) );
+		
+		add_filter( 'cwp_core_get_post_obj' , array( $this , 'cwp_core_video_get_post_obj' ), 10 , 2 );
 			
 	} // end __construct
 	
@@ -36,6 +38,8 @@ class CAHNRSWP_Core_Video {
 				);
 			
 			$this->video_model->cwp_save_video( $post_id , $meta_data ); 
+			
+			$this->video_model->cwp_save_image( $post_id , $this->video_model->video_thumbnail );
 			
 			// Check permissions again just in case 
 			if ( $this->video_model->cwp_check_perm( 'video' , 'add_video' ) ){
@@ -73,5 +77,25 @@ class CAHNRSWP_Core_Video {
 		}; // end if
 		
 	} // end method cwp_video_editor
+	
+	/*
+	 * @desc - Takes the modified post object and adds youtube
+	 * thumbnail if a featured image is not set
+	 * @param object $post_obj - Custom post object used to display content.
+	 * @param object $post - WP Post object
+	 * @return - $post_obj.
+	*/
+	public function cwp_core_video_get_post_obj( $post_obj , $post ){
+		
+		if ( 'video' == $post->post_type && ! isset( $post_obj->img_src ) ) {
+			
+			$this->video_model->cwp_set_video_props_from_meta( $post );
+			
+			$post_obj->img_src = $this->video_model->video_thumbnail;
+			
+		}; // end if
+		
+		return $post_obj;
+	} // end method cwp_core_video_get_post_obj
 	
 }

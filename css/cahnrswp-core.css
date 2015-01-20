@@ -137,6 +137,13 @@
 }
 */
 
+.cpw-tab-section .cwp-gallery {
+	width: 21%;
+	display: inline-block;
+	vertical-align: top;
+	margin: 0 2% 1rem;
+};
+
 
 /**
  * CSS Hooks

@@ -14,3 +14,114 @@
 	height: 6rem;
 }
 
+/*
+ * New CSS 
+*/
+
+.cwp-form .cwp-form-section {
+	margin: 0;
+	padding: 0;
+}
+
+.cwp-form .cwp-field-accordion .cwp-form-section-content {
+	border: 1px solid #ccc;
+	padding: 0.5rem 0 1rem 0;
+	margin: 0;
+	display: none;
+}
+
+.cwp-form .cwp-field-accordion.active-field-accordion .cwp-form-section-content {
+	display: block;
+}
+
+.cwp-form .cwp-field-set {
+	display: block;
+	padding: 0.5rem 0;
+	margin: 0 1rem;
+}
+
+.cwp-form .dynamic-field {
+	display: none;
+}
+
+.cwp-form .dynamic-field.active-field {
+	display: block;
+}
+
+.cwp-form .cwp-field-accordion .cwp-form-section-title {
+	display: block;
+	padding: 0.5rem 1rem;
+	background: #eee;
+	border: 1px solid #ccc;
+	text-decoration: none; 
+}
+
+.cwp-form .add-insert .add-insert-item {
+	margin: 0 0 0.25rem;
+	font-size: 0.8rem;
+	font-weight: bold;
+	word-wrap: break-word;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	background: #efefef;
+	padding: 0.25rem 0.5rem;
+}
+
+/*.cwp-form .cwp-form-section > ul,
+.cwp-form .cwp-form-section p {
+	margin: 0.5rem;
+}
+
+.cwp-form .dynamic-field {
+	display: none;
+}
+
+.cwp-form .dynamic-field.active-field{
+	display: block;
+}
+
+.cwp-form-section-title {
+	display: block;
+	padding: 0.5rem 1rem;
+	font-size: 1rem;
+	font-weight: bold;
+	color: #ccffff;
+	text-decoration: none;
+	background: #777;
+}
+
+.cwp-form .cwp-form-section-content {
+	display: none;
+	border: 1px solid #777;
+	background-color: #fff;
+	padding: 0.5rem 0 2rem;
+}
+
+.cwp-form .cwp-form-section-content.active-form-section {
+	display: block;
+}
+
+.cwp-form .add-insert-item {
+	padding: 0.5rem 2.5rem 0.5rem 1rem;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	color: #555;
+	font-size: 0.8rem;
+	word-wrap: break-word;
+	position: relative;
+	background: #eee;
+	margin-bottom: 0.25rem;
+}
+
+.cwp-form .add-insert-item a {
+	width: 2rem;
+	height: 100%;
+	color: #600;
+	background: #ddd;
+	text-align: center;
+	position: absolute;
+	right: 0;
+	top: 0;
+	border-radius: 3px;
+}*/
+

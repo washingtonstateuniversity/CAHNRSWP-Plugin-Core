@@ -1,20 +1,24 @@
 <?php
 
-$has_image = ( isset( $post->img ) )? ' has-image' : '';
+$has_image = ( isset( $item->img ) )? ' has-image' : '';
 
-$p = '<div class="cwp-promo' . $has_image .' ' . $this->cwp_display_post_css( $instance , $post ) . '" >';
+$p = '<div class="cwp-promo' 
+	. $has_image 
+	.' ' 
+	. CAHNRSWP_Core_Post_Display::cwp_display_post_css( $instance , $item ) 
+	. '" >';
 
-	if( isset( $post->img ) ){
+	if( isset( $item->img ) ){
 			
-			if( isset( $post->link ) ) {
+			if( isset( $item->link ) ) {
 				
-				 $p .= '<a href="' . $post->link . '" >';
+				 $p .= '<a href="' . $item->link . '" >';
 				 
 			};
 		
-			$p .= $post->img;
+			$p .= $item->img;
 			
-			if( isset( $post->link ) ) {
+			if( isset( $item->link ) ) {
 				
 				 $p .= '</a>';
 				 
@@ -24,9 +28,9 @@ $p = '<div class="cwp-promo' . $has_image .' ' . $this->cwp_display_post_css( $i
 	
 	$p .= '<div class="cwp-promo-content">';
 	
-		$p .= '<h4>' . $post->title . '</h4>';
+		$p .= '<h4>' . $item->title . '</h4>';
 		
-		$p .= $post->excerpt;
+		$p .= $item->excerpt;
 	
 	$p .= '</div>';
 

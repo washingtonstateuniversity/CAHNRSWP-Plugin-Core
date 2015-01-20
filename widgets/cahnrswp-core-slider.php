@@ -1,5 +1,7 @@
 <?php
 class CAHNRSWP_Core_Slider extends WP_Widget {
+	
+	private $model;
 
 	/**
 	 * Sets up the widgets name etc
@@ -11,31 +13,12 @@ class CAHNRSWP_Core_Slider extends WP_Widget {
 			'Slider Feed', // Name
 			array( 'description' => 'Feed content in a dynamic slider.', ) // Args
 		);
+		
+		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-slider-model.php';
+		
+		$this->model = new CAHNRSWP_Core_Slider_Model();
+		
 	} // end method __construct
-	
-	/*
-	 * @desc - Sets default values for the widget
-	 * @param array $instance - passed by reference
-	*/
-	public function widget_defaults( &$instance ){
-		
-		if( !isset( $instance['title'] ) ) $instance['title'] = '';
-		
-		if( !isset( $instance['post_type'] ) ) $instance['post_type'] = 'post';
-		
-		if( !isset( $instance['tax_query'] ) ) $instance['tax_query'] = 'category';
-		
-		if( !isset( $instance['tax_terms'] ) ) $instance['tax_terms'] = '';
-		
-		if( !isset( $instance['slide_count'] ) ) $instance['slide_count'] = 3;
-		
-		if( !isset( $instance['display'] ) ) $instance['display'] = 'promo-gallery';
-		
-		if( !isset( $instance['visible'] ) ) $instance['visible'] = 4;
-		
-		$instance['posts_per_page'] = $instance['slide_count'] * $instance['visible'];
-		
-	}
 
 	/**
 	 * Outputs the content of the widget
@@ -45,7 +28,7 @@ class CAHNRSWP_Core_Slider extends WP_Widget {
 	 */
 	public function widget( $args, $instance ) {
 		
-		$this->widget_defaults( $instance );
+		$this->model->cwp_set_defaults( $instance );
 		
 		$slider_id = rand( 100, 10000000 );
 		
@@ -165,15 +148,11 @@ class CAHNRSWP_Core_Slider extends WP_Widget {
 	 */
 	public function form( $instance ) {
 		
-		$this->widget_defaults( $instance );
-		
-		$cwp_form = new CAHNRWP_Core_Form;
-		
-		$post_types = $cwp_form->cwp_get_post_types();
+		$this->model->cwp_set_defaults( $instance );
 		
 		include CAHNRSWPCOREDIR . '/inc/inc-form-slider-feed.php';
 		
-	}
+	} // end method form
 
 	/**
 	 * Processing widget options on save

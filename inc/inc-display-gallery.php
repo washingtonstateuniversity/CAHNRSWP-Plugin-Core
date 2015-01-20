@@ -1,69 +1,87 @@
 <?php
 
-$has_image = ( isset( $post->img ) )? ' has-image' : '';
+$item_link = ( isset( $item->link ) )? '<a href="' . $item->link . '" >' : '';
 
-$post_link = ( isset( $post->link ) )? '<a href="' . $post->link . '" >' : '';
+$item_link_end = ( isset( $item->link ) )? '</a>' : '';
 
-$post_link_end = ( isset( $post->link ) )? '</a>' : '';
-
-$p = '<div class="cwp-gallery cwp-post-item' . $has_image .' ' . $post->content_type . ' ' . $this->cwp_display_post_css( $instance , $post ) . '" >';
-
-	$p .= '<div class="cwp-post-item-wrapper">';
-
-		if( isset( $post->img ) ){
-			
-			$p .= '<div class="cwp-image" >';
-					
-				$p .= $post_link;
-				
-				$p .= '<img src="' . CAHNRSWPCOREURL . '/images/spacer16-9.png" style="background-image: url(' . $post->img_src . '); background-position: center center; background-size: cover;" />';
-				
-				$p .= $post_link_end;
-			
-			$p .= '</div>';
-			
-		}; // end if
-		
+if ( isset( $item->img ) && $item->img ) {
 	
-		
-		$p .= '<div class="cwp-content">';
-		
-			if( isset( $post->post_date ) || isset( $post->author ) ){
+	$has_image = ' has-image';
+	
+} else {
+	
+	$has_image = false;
+	
+}; // end if
+
+if ( ! empty( $instance[ 'per_row' ] ) && '100%' !=  $instance[ 'per_row' ] ){
+	
+	$style = 'style="margin: 0 0 1.5rem; 
+			padding: 0; display: inline-block; 
+			vertical-align: top; width: ' 
+			. $instance[ 'per_row' ] . ';" ';
+	
+};// end if
+
+?>
+<li class="promo-gallery <?php echo $has_image . ' ' . $item->content_type; ?>" <?php if( ! empty( $style ) ) echo $style; ?> >
+
+	<?php if ( $has_image ):?>
+	
+    <div class="cwp-image" style="margin: 0 0.5rem;">
+    
+    	<?php echo $item_link. $item->img . $item_link_end; ?>
+    
+    </div>
+    
+    <?php endif;?>
+    
+    <ul class="cwp-content" style="margin: 0 0.5rem; padding:0; list-style-type: none;">
+    
+    	<?php if ( isset( $item->title ) ): ?>
 					
-				$p .= '<div class="cwp-post-meta">';
+				<li class="cwp-post-title">
 		
-					if( isset( $post->post_date ) ) $p .= '<span class="cwp-post-date">' . $post->post_date . '</span>';
-					
-					if( isset( $post->author ) ) $p .= '<span class="cwp-post-author">' . $post->author . '</span>';
-				
-				$p .= '</div>';
-			
-			}; // end if
-		
-			if( isset( $post->title ) ){
-		
-				$p .= '<h4>';
-				
-					$p .= $post_link;
-				  
-					$p .= $post->title;
-					
-					$p .= $post_link_end; 
+					<h4>
+                    
+                    	<?php echo $item_link . $item->title . $item_link_end; ?>
 				 
-				$p .= '</h4>';
+					</h4>
+				
+				</li>
 			
-			}; // end if
+		<?php endif;?>
+    	
+        <?php if ( isset( $item->post_date ) || isset( $item->author ) ): ?>
 					
-			if( isset( $post->excerpt ) ){
+				<li class="cwp-post-meta">
 		
-				$p .= $post->excerpt;
+					<?php if ( isset( $item->post_date ) ) : ?> 
+                    
+                    	<span class="cwp-post-date"><?php echo $item->post_date; ?></span>
+                        
+                    <?php endif;?>
+                    
+                    <?php if ( isset( $item->post_date ) ) : ?> 
+                    
+                    	<span class="cwp-post-author"><?php echo $item->author; ?></span>
+                        
+                    <?php endif;?>
+				
+				</li>
 			
-			}; // end if
-		
-		$p .= '</div>';
-	
-	$p .= '</div>';
+		<?php endif;?>
+        
+        <?php if ( isset( $item->excerpt ) ): ?>
+					
+				<li class="cwp-post-excerpt">
+                    
+                    <?php echo $item->excerpt; ?>
+				
+				</li>
+			
+		<?php endif;?>
+    
+    </ul>
 
-$p .= '</div>';
-
-echo $p;
+</li>
