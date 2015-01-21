@@ -14,6 +14,9 @@
     	<label>Show Date</label><br />
     <input type="checkbox" name="<?php echo $this->get_field_name( 'show_author' ); ?>" value="1" <?php checked( $instance['show_author'] , 1 );?> /> 
     	<label>Show Author</label><br />
+    <input type="checkbox" name="<?php echo $this->get_field_name( 'show_lightbox' ); ?>" value="1" <?php checked( $instance['show_lightbox'] , 1 );?> /> 
+    	<label>Lightbox Content</label><br />
+        
 </p>
 <p style="display: inline-block; width: 48%; margin-right: 2%; vertical-align: top;">
 	<label>More Title:</label><input type="text" name="<?php echo $this->get_field_name( 'more_title' ); ?>" value="<?php echo $instance['more_title'];?>" /><br /> 

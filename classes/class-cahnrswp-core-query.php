@@ -8,29 +8,35 @@ class CAHNRSWP_Core_Query {
 	*/
 	public static function cwp_get_items( $instance ){
 		
-		switch ( $instance['feed_type'] ) {
-			
-			case 'static':
-			
-				if ( ! empty( $instance['insert_urls'] ) ) {
-			
-					$items = CAHNRSWP_Core_Query::cwp_get_static_items( $instance['insert_urls'] );
+		$items = apply_filters( 'cwp_core_feed_items' , array() , $instance );
+		
+		if ( empty( $items ) ) {  
+		
+			switch ( $instance['feed_type'] ) {
 				
-				}; // end if
+				case 'static':
 				
-				break;
+					if ( ! empty( $instance['insert_urls'] ) ) {
+				
+						$items = CAHNRSWP_Core_Query::cwp_get_static_items( $instance['insert_urls'] );
+					
+					}; // end if
+					
+					break;
+				
+				case 'dynamic':
+				
+					if ( ! empty( $instance['post_type'] ) ) { 
+					
+						$items = CAHNRSWP_Core_Query::cwp_get_dynamic_items( $instance );
+					
+					}; // end if
+					
+					break;
+				
+			}; // end switch
 			
-			case 'dynamic':
-			
-				if ( ! empty( $instance['post_type'] ) ) { 
-				
-					$items = CAHNRSWP_Core_Query::cwp_get_dynamic_items( $instance );
-				
-				}; // end if
-				
-				break;
-			
-		}; // end switch
+		}; // end if
 		
 		return $items;
 		
@@ -84,7 +90,7 @@ class CAHNRSWP_Core_Query {
 					
 					$the_query->the_post();
 					
-					$items[] = CAHNRSWP_Core_Query::cwp_get_item_from_post( $the_query->the_post );
+					$items[] = CAHNRSWP_Core_Query::cwp_get_item_from_post( $the_query->post );
 									
 				}; // end while
 				
@@ -230,7 +236,7 @@ class CAHNRSWP_Core_Query {
 		
 		$item->author = get_the_author( $post->ID );
 		
-		$item->post_date = get_the_date( $post->ID );
+		$item->post_date = get_the_date( 'F j, Y' , $post->ID );
 		
 		$item->img = get_the_post_thumbnail( $post->ID , 'thumbnail' );
 		

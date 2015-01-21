@@ -37,7 +37,13 @@ class CAHNRSWP_Core_Content_Feed extends WP_Widget {
 		
 			echo $args['before_widget'];
 			
-			CAHNRSWP_Core_Post_Display::cwp_display_wrapper( $instance , true );
+			if ( ! empty( $instance['title'] ) ){
+				
+				echo '<h3 class="cwp-widget-title">' . $instance['title'] . '</h3>';
+				
+			}; // end if
+			
+			echo CAHNRSWP_Core_Post_Display::cwp_display_wrapper( $instance , true );
 			
 			foreach ( $items as $item ) {
 				
@@ -47,7 +53,7 @@ class CAHNRSWP_Core_Content_Feed extends WP_Widget {
 				
 			}; // end foreach
 			
-			CAHNRSWP_Core_Post_Display::cwp_display_wrapper( $instance );
+			echo CAHNRSWP_Core_Post_Display::cwp_display_wrapper( $instance );
 				
 			echo $args['after_widget'];
 		

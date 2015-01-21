@@ -51,9 +51,9 @@ class CAHNRSWP_Core {
 			
 			require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-query.php';
 			
-			require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-post-display.php';
-			
 		}; // end if
+		
+		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-post-display.php';
 		
 		add_action( 'widgets_init', array( $this , 'cwp_register_widgets') );
 		
@@ -63,9 +63,47 @@ class CAHNRSWP_Core {
 		
 		add_filter( 'post_thumbnail_html' , array( $this , 'cwp_post_thumbnail_html' ) , 20 , 5 );
 		
+		add_action('wp_head', array( $this , 'cwp_wp_head' ) );
+		
+		if ( ! empty( $_GET['cwpcore_service'] ) ){ 
+		
+			add_filter( 'template_include', array( $this , 'cwp_template_include' ) , 99 );
+		
+		}; // end if
+		
 		$this->cwp_add_video_support();
 		
 	} // end constructor
+	
+	/*
+	 * @desc - Adds code to page head
+	*/
+	public function cwp_wp_head() {
+		
+		echo '<script>';
+		
+		echo 'var service_url = "' . get_site_url() . '"';
+		
+		echo '</script>';
+		
+	} // end method cwp_head
+	
+	/*
+	 * @desc - Gets service template
+	*/
+	public function cwp_template_include( $template ){
+		
+		switch( $_GET['cwpcore_service'] ){
+			
+			case 'query':
+				$template = CAHNRSWPCOREDIR . '/service/service-cahnrswp-core-query.php';
+				break;
+			
+		}; // end switch
+		
+		return $template;
+		
+	} // end method cwp_template_include
 	
 	/*
 	 * @desc
@@ -73,37 +111,41 @@ class CAHNRSWP_Core {
 	*/
 	public function cwp_post_thumbnail_html( $html, $post_id, $post_thumbnail_id, $size, $attr ){
 		
-    	if ( empty( $html ) && $post_id ) {
-			
-        	$img_src = get_post_meta( $post_id , '_default_img_src' , true );
-			
-    	} else {
-			
-			/*
-			 * Instead of doing more calls to get the src, lets try and
-			 * pull it from the $html.
-			*/
-			preg_match('/src="(.*?)"/i', $html, $matches );
-			
-			if ( $matches ){
-				
-				$img_src = str_replace ( array( 'src="' , '"' ) , '' , $matches[0] );
-				
-			};
+		if ( empty( $size ) || 'thumbnail' == $size ){
 		
+			if ( empty( $html ) && $post_id ) {
+				
+				$img_src = get_post_meta( $post_id , '_default_img_src' , true );
+				
+			} else {
+				
+				/*
+				 * Instead of doing more calls to get the src, lets try and
+				 * pull it from the $html.
+				*/
+				preg_match('/src="(.*?)"/i', $html, $matches );
+				
+				if ( $matches ){
+					
+					$img_src = str_replace ( array( 'src="' , '"' ) , '' , $matches[0] );
+					
+				};
+			
+			}; // end if
+			
+			if ( ! empty( $img_src ) ){
+				
+				$html = '<img ';
+				
+				$html .= 'src="' . CAHNRSWPCOREURL . '/images/spacer4-3.png" ';
+				
+				$html .= 'style="background-image: url(' . $img_src . '); background-repeat: no-repeat; background-size: cover; background-position: center center; width: 100%; display: block;" ';
+				
+				$html .= ' />'; 
+				
+			}; // end if
+			
 		}; // end if
-		
-		if ( ! empty( $img_src ) ){
-			
-			$html = '<img ';
-			
-			$html .= 'src="' . CAHNRSWPCOREURL . '/images/spacer4-3.png" ';
-			
-			$html .= 'style="background-image: url(' . $img_src . '); background-repeat: no-repeat; background-size: cover; background-position: center center; width: 100%; display: block;" ';
-			
-			$html .= ' />'; 
-			
-		};
 		
     	return $html;
 	}
@@ -151,7 +193,11 @@ class CAHNRSWP_Core {
 		
 		wp_enqueue_script( 'cycle2', CAHNRSWPCOREURL . '/js/cycle2.js' , array(), '0.0.1', false );
 		
+		wp_enqueue_script( 'cahnrswp-core-js', CAHNRSWPCOREURL . '/js/core.js' , array(), '0.0.1', false );
+		
 		wp_enqueue_style( 'cahnrswp-core', CAHNRSWPCOREURL . '/css/cahnrswp-core.css' , array(), '0.0.1', false );
+		
+		wp_enqueue_style( 'jquery-ui-css', '//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css' , array(), '0.0.1', false );
 		
 	} // cwp_enqueue_scripts
 	

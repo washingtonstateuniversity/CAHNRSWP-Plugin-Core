@@ -83,37 +83,135 @@ class CAHNRSWP_Core_Post_Display {
 
 	}
 	
-	public static function cwp_display_wrapper( $instance , $start = false ){
+	public static function cwp_display_wrapper( $instance , $start = false , $css = '' ){
 		
-		$tag = '';
+		if ( empty( $instance['tag'] ) ){
+			
+			$instance['tag'] = CAHNRSWP_Core_Post_Display::cwp_get_tag( $instance );
+			
+		};// end if
 		
 		if ( $start ){
 			
-			switch ( $instance['display'] ){
-				
-				case 'list' :
-				case 'promo-gallery' :
-					$tag = '<ul class="' . $instance['display'] . '" >';
-					break;
-				
-			}; // end switch
+			$tag = '<' . $instance['tag'] .' class="' . $instance['display'] . '" style="' . $css . '">';
 			
 		} else {
-			
-			switch ( $instance['display'] ){
-				
-				case 'list' :
-				case 'promo-gallery' :
-					$tag = '</ul>';
-					break;
-					
-			}; // end switch
+	
+			$tag = '</' . $instance['tag'] .'>';
 			
 		} // end if
 		
 		return $tag;
 		
 	} // end method cwp_display_wrapper
+	
+	/*
+	 * @desc - Gets slideshow from instance
+	 * @param array $instance
+	 * @return array - Slideshow settings
+	*/
+ public static function cwp_get_slideshow_settings( $instance ) {
+		
+		$show_settings = array();
+		
+		// Slideshow Effects
+		
+		if ( ! empty( $instance['show_fx'] ) ) {
+			
+			$show_settings[] = 'data-cycle-fx=' . $instance['show_fx'];
+			
+		} else {
+			
+			$show_settings[] = 'data-cycle-fx=scrollHorz';
+			
+		}; // end if
+		
+		// Slideshow Delay
+		
+		if ( ! empty( $instance['show_delay'] ) ) {
+			
+			$show_settings[] = 'data-cycle-timeout=' . $instance['show_delay'];
+			
+		} else {
+			
+			$show_settings[] = 'data-cycle-timeout=0';
+			
+		}; // end if
+		
+		if ( ! empty( $instance['tag'] ) ) {
+			
+			$show_settings[] = 'data-cycle-slides="> ' . $instance['tag'] .'"';
+			
+		} else {
+			
+			$show_settings[] = 'data-cycle-slides="> div"';
+			
+		}; // end if
+		
+		if ( ! empty( $instance['show_id'] ) ){
+			
+			$show_settings[] = 'data-cycle-prev="#cycle-prev-' . $instance['show_id'] . '"';
+			
+        	$show_settings[] = 'data-cycle-next="#cycle-next-' . $instance['show_id'] . '"';
+			
+			$show_settings[] = 'data-cycle-pager="#pager-' . $instance['show_id'] . '"';
+			
+		}; // end if
+		
+		return $show_settings;
+		
+	} // end method function cwp_get_slideshow_settings
+	
+	/*
+	 * @desc - get tag from set display
+	 * @param array $instance
+	 * @return string - html tag
+	*/
+	public static function cwp_get_tag( $instance ){
+		
+		if( ! empty( $instance['display'] ) ){
+		
+			switch ( $instance['display'] ){
+				
+				case 'list' :
+				case 'promo-gallery' :
+					$tag = 'ul';
+					break;
+				
+			}; // end switch
+			
+		} else {
+			
+			$tag = 'div';
+			
+		}; // end if
+		
+		return $tag;
+		
+	} // end method cwp_get_tag
+	
+	public static function cwp_get_item_link( $item , $instance , $start = false ){
+		
+		if ( ! isset( $item->link ) ){
+			
+			$link = '';
+			
+		} else if( $start ) {
+			
+			$lb_class = ( ! empty( $instance['show_lightbox'] ) ) ? 'show-lightbox-content' : '';
+			
+			$link = '<a href="' . $item->link . '" class="' . $lb_class . '" >';
+			
+		} else {
+			
+			$link = '</a>';
+			
+		}; // end if
+		
+		return $link;
+		
+	} // end method cwp_get_tag
+	 
 	
 	
 } // end CAHNRWP_Core_Post

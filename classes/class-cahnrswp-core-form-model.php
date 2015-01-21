@@ -91,6 +91,12 @@ class CAHNRSWP_Core_Form_Model {
 			
 		}; // end if
 		
+		if( ! isset( $instance['show_lightbox'] ) ){
+			
+			$instance['show_lightbox'] = false;
+			
+		}; // end if
+		
 		if( ! isset( $instance['css_hook'] ) ){
 			
 			$instance['css_hook'] = '';

@@ -1,8 +1,8 @@
 <?php
 
-$item_link = ( isset( $item->link ) )? '<a href="' . $item->link . '" >' : '';
+$item_link = CAHNRSWP_Core_Post_Display::cwp_get_item_link( $item , $instance , true );
 
-$item_link_end = ( isset( $item->link ) )? '</a>' : '';
+$item_link_end = CAHNRSWP_Core_Post_Display::cwp_get_item_link( $item , $instance );
 
 if ( isset( $item->img ) && $item->img ) {
 	
@@ -14,17 +14,21 @@ if ( isset( $item->img ) && $item->img ) {
 	
 }; // end if
 
-if ( ! empty( $instance[ 'per_row' ] ) && '100%' !=  $instance[ 'per_row' ] ){
+if ( ! empty( $instance[ 'per_row' ] ) && '1' !=  $instance[ 'per_row' ] ){
+	
+	$width = ( 100 / $instance[ 'per_row' ] );
+	
+	$width = round( $width , 2, PHP_ROUND_HALF_DOWN );
 	
 	$style = 'style="margin: 0 0 1.5rem; 
 			padding: 0; display: inline-block; 
 			vertical-align: top; width: ' 
-			. $instance[ 'per_row' ] . ';" ';
+			. $width . '% ;" ';
 	
 };// end if
 
 ?>
-<li class="promo-gallery <?php echo $has_image . ' ' . $item->content_type; ?>" <?php if( ! empty( $style ) ) echo $style; ?> >
+<li class="cwp-item promo-gallery <?php echo $has_image . ' ' . $item->content_type; ?>" <?php if( ! empty( $style ) ) echo $style; ?> >
 
 	<?php if ( $has_image ):?>
 	
