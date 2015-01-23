@@ -3,7 +3,7 @@
 * Plugin Name: CAHNRSWP Core
 * Plugin URI:  http://cahnrs.wsu.edu/communications/
 * Description: Core feature set for CAHNRS sites.
-* Version:     0.0.1
+* Version:     0.1.1
 * Author:      CAHNRS Communications, Danial Bleile
 * Author URI:  http://cahnrs.wsu.edu/communications/
 * License:     Copyright Washington State University
@@ -39,37 +39,37 @@ class CAHNRSWP_Core {
 		
 		if ( is_admin() ) {
 		
-			require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-form-model.php'; 
+			//require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-form-model.php'; 
 			
 			add_action( 'admin_enqueue_scripts', array( $this, 'cwp_admin_enqueue_scripts' ), 20 );
 			
-			add_action( 'edit_form_after_title', array( $this ,'cwp_edit_form_after_title' ) );
+			//add_action( 'edit_form_after_title', array( $this ,'cwp_edit_form_after_title' ) );
 			
-			add_action( 'save_post' , array( $this , 'cwp_save_post' ) );
+			//add_action( 'save_post' , array( $this , 'cwp_save_post' ) );
 		
 		} else {
 			
-			require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-query.php';
+			//require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-query.php';
 			
 		}; // end if
 		
-		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-post-display.php';
+		//require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-post-display.php';
 		
-		add_action( 'widgets_init', array( $this , 'cwp_register_widgets') );
+		//add_action( 'widgets_init', array( $this , 'cwp_register_widgets') );
 		
 		add_action( 'wp_enqueue_scripts', array( $this, 'cwp_enqueue_scripts' ), 20 );
 		
-		add_action( 'init', array( $this , 'cwp_init' ) );
+		//add_action( 'init', array( $this , 'cwp_init' ) );
 		
-		add_filter( 'post_thumbnail_html' , array( $this , 'cwp_post_thumbnail_html' ) , 20 , 5 );
+		//add_filter( 'post_thumbnail_html' , array( $this , 'cwp_post_thumbnail_html' ) , 20 , 5 );
 		
-		add_action('wp_head', array( $this , 'cwp_wp_head' ) );
+		//add_action('wp_head', array( $this , 'cwp_wp_head' ) );
 		
-		if ( ! empty( $_GET['cwpcore_service'] ) ){ 
+		//if ( ! empty( $_GET['cwpcore_service'] ) ){ 
 		
-			add_filter( 'template_include', array( $this , 'cwp_template_include' ) , 99 );
+			//add_filter( 'template_include', array( $this , 'cwp_template_include' ) , 99 );
 		
-		}; // end if
+		//}; // end if
 		
 		$this->cwp_modules(); // add supported modules
 		
@@ -81,7 +81,7 @@ class CAHNRSWP_Core {
 	private function cwp_modules(){
 		
 		// add video support
-		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-video.php';
+		//require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-video.php';
 		
 		// add vanity url support
 		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-vanity-url.php';
