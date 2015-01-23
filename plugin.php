@@ -73,6 +73,8 @@ class CAHNRSWP_Core {
 		
 		$this->cwp_add_video_support();
 		
+		$this->cwp_add_vanity_url_support();
+		
 	} // end constructor
 	
 	/*
@@ -160,6 +162,17 @@ class CAHNRSWP_Core {
 		$cwp_videos = new CAHNRSWP_Core_Video();
 		
 	} // end cwp_add_video_support
+	
+	/*
+	 * @desc - Adds vanity url support
+	*/
+	public function cwp_add_vanity_url_support() {
+		
+		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-vanity-url.php';
+		
+		$cwp_vanity_urls = new CAHNRSWP_Core_Vanity_URL();
+		
+	} // end method cwp_add_vanity_url_support
 	
 	/**
 	 * @desc Actions initiated by add_action( init , ... 

@@ -67,6 +67,27 @@
 	padding: 0.25rem 0.5rem;
 }
 
+/*
+ * Vanity URL Form
+*/
+#vanityurl-campaign .inside {padding: 10px 0;}
+#vanityurl-campaign .input-description-note {padding-bottom: 15px; margin: 0 15px; color: red; }
+#vanityurl-campaign .metabox-field-set {display: inline-block; width: 33%; vertical-align: top; border-right: 1px solid #ccc;}
+#vanityurl-campaign .metabox-field-set.last {border-right: none;}
+#vanityurl-campaign .metabox-field-set-inner {margin: 0 15px }
+#vanityurl-campaign .metabox-field-set-inner label {font-size: 1.1em; font-weight: bold; display: block; padding-bottom: 4px;}
+#vanityurl-campaign .metabox-field-set-inner label em {color: #999; font-weight: normal;}
+#vanityurl-campaign .metabox-field-set-inner input {display: block; width: 100%;}
+#vanityurl-campaign .metabox-field-set-inner .input-description {padding-bottom: 15px;}
+#vanityurl-redirect { margin-bottom: 2rem }
+#vanityurl-redirect .metabox-field-set.redirect {display: inline-block; vertical-align: top; width: 66%; border-right: 1px solid #ccc;}
+#vanityurl-redirect .inside {padding: 10px 0;}
+#vanityurl-redirect label {font-size: 1.1em; font-weight: bold; display: block; padding-bottom: 4px;}
+#vanityurl-redirect input {display: block; width: 100%;}
+#vanityurl-redirect .metabox-field-set-inner {margin: 0 15px }
+#vanityurl-redirect .metabox-field-set.redirect .input-description {color: red;}
+#vanityurl-redirect .metabox-field-set.redirect-data {display: inline-block; vertical-align: top; width: 33%;}
+
 /*.cwp-form .cwp-form-section > ul,
 .cwp-form .cwp-form-section p {
 	margin: 0.5rem;
