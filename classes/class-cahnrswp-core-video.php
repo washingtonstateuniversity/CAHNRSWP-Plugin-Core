@@ -99,3 +99,5 @@ class CAHNRSWP_Core_Video {
 	} // end method cwp_core_video_get_post_obj
 	
 }
+
+$cwp_videos = new CAHNRSWP_Core_Video();

@@ -73,3 +73,5 @@ class CAHNRSWP_Core_Vanity_URL {
 	} // end method cwp_service_postlink
 	
 } // end class CAHNRSWP_Core_Vanity_URL
+
+$cwp_vanity_urls = new CAHNRSWP_Core_Vanity_URL();

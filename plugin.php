@@ -71,11 +71,22 @@ class CAHNRSWP_Core {
 		
 		}; // end if
 		
-		$this->cwp_add_video_support();
-		
-		$this->cwp_add_vanity_url_support();
+		$this->cwp_modules(); // add supported modules
 		
 	} // end constructor
+	
+	/*
+	 * @desc - Add feature modules
+	*/
+	private function cwp_modules(){
+		
+		// add video support
+		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-video.php';
+		
+		// add vanity url support
+		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-vanity-url.php';
+		
+	} // end method cwp_modules
 	
 	/*
 	 * @desc - Adds code to page head
@@ -151,28 +162,6 @@ class CAHNRSWP_Core {
 		
     	return $html;
 	}
-	
-	/*
-	 * @desc Adds video support to theme
-	*/ 
-	public function cwp_add_video_support(){
-		
-		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-video.php';
-		
-		$cwp_videos = new CAHNRSWP_Core_Video();
-		
-	} // end cwp_add_video_support
-	
-	/*
-	 * @desc - Adds vanity url support
-	*/
-	public function cwp_add_vanity_url_support() {
-		
-		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-vanity-url.php';
-		
-		$cwp_vanity_urls = new CAHNRSWP_Core_Vanity_URL();
-		
-	} // end method cwp_add_vanity_url_support
 	
 	/**
 	 * @desc Actions initiated by add_action( init , ... 
