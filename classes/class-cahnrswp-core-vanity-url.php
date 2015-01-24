@@ -59,16 +59,18 @@ class CAHNRSWP_Core_Vanity_URL {
 	
 	public function cwp_service_postlink( $post_link, $post, $leavename ) {	
  		/* Remove the slug from published post permalinks. Only affect our CPT though.*/
- 
-    	if ( ! in_array( $post->post_type, array( 'vanityurl' ) ) || 'publish' != $post->post_status ) {
+		
+		if( 'vanityurl' == $post->post_type && 'publish' == $post->post_status ){
 			
-       		return $post_link;
+			$post_link = str_replace( '/' . $post->post_type . '/', '/', $post_link );
+			
+			return $post_link;
+			
+		} else {
+			
+			return $post_link;
 			
 		}; // end if
- 
-    	$post_link = str_replace( '/' . $post->post_type . '/', '/', $post_link );
- 
-    	return $post_link;
 		
 	} // end method cwp_service_postlink
 	
