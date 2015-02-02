@@ -62,7 +62,7 @@ class CAHNRSWP_Core_Vanity_URL {
 		
 		if( 'vanityurl' == $post->post_type && 'publish' == $post->post_status ){
 			
-			$post_link = str_replace( '/' . $post->post_type . '/', '/', $post_link );
+			$post_link = str_replace( '/url/', '/', $post_link );
 			
 			return $post_link;
 			
