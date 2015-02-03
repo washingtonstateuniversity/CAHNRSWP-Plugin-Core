@@ -37,9 +37,38 @@ class CAHNRSWP_Core {
 		
 		define( 'CAHNRSWPCOREDIR' , plugin_dir_path( __FILE__ ) ); // Plugin Directory Path
 		
-		if ( is_admin() ) {
+		// Load core classes 
 		
-			require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-form-model.php'; 
+		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-form-model.php';
+		
+		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-query.php';
+		 
+		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-post-display.php';
+		
+		// Add actions
+		
+		$this->cwp_add_actions();
+		
+		// Add Filters
+		
+		$this->cwp_add_filters();
+		
+		// Add Supported Modules
+		
+		$this->cwp_modules(); 
+		
+		// Add Shortcodes
+		
+		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-shortcodes.php';
+		
+	} // end constructor
+	
+	/*
+	 * @desc - Add WP Actions
+	*/
+	private function cwp_add_actions(){
+		
+		if ( is_admin() ) {
 			
 			add_action( 'admin_enqueue_scripts', array( $this, 'cwp_admin_enqueue_scripts' ), 20 );
 			
@@ -47,13 +76,7 @@ class CAHNRSWP_Core {
 			
 			add_action( 'save_post' , array( $this , 'cwp_save_post' ) );
 		
-		} else {
-			
-			require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-query.php';
-			
 		}; // end if
-		
-		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-post-display.php';
 		
 		add_action( 'widgets_init', array( $this , 'cwp_register_widgets') );
 		
@@ -61,9 +84,16 @@ class CAHNRSWP_Core {
 		
 		add_action( 'init', array( $this , 'cwp_init' ) );
 		
-		add_filter( 'post_thumbnail_html' , array( $this , 'cwp_post_thumbnail_html' ) , 20 , 5 );
-		
 		add_action('wp_head', array( $this , 'cwp_wp_head' ) );
+		
+	} // end method cwp_add_actions
+	
+	/*
+	 * @desc - Add WP Filters
+	*/
+	private function cwp_add_filters(){
+		
+		add_filter( 'post_thumbnail_html' , array( $this , 'cwp_post_thumbnail_html' ) , 20 , 5 );
 		
 		if ( ! empty( $_GET['cwpcore_service'] ) ){ 
 		
@@ -71,10 +101,8 @@ class CAHNRSWP_Core {
 		
 		}; // end if
 		
-		$this->cwp_modules(); // add supported modules
+	} // end method cwp_add_filters
 		
-	} // end constructor
-	
 	/*
 	 * @desc - Add feature modules
 	*/
@@ -87,6 +115,7 @@ class CAHNRSWP_Core {
 		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-vanity-url.php';
 		
 	} // end method cwp_modules
+	
 	
 	/*
 	 * @desc - Adds code to page head

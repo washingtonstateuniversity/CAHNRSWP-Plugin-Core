@@ -8,6 +8,8 @@ class CAHNRSWP_Core_Query {
 	*/
 	public static function cwp_get_items( $instance ){
 		
+		
+		
 		$items = apply_filters( 'cwp_core_feed_items' , array() , $instance );
 		
 		if ( empty( $items ) ) {  
@@ -90,7 +92,7 @@ class CAHNRSWP_Core_Query {
 					
 					$the_query->the_post();
 					
-					$items[] = CAHNRSWP_Core_Query::cwp_get_item_from_post( $the_query->post );
+				 	$items[] = CAHNRSWP_Core_Query::cwp_get_item_from_post( $the_query->post );
 									
 				}; // end while
 				
@@ -228,7 +230,7 @@ class CAHNRSWP_Core_Query {
 		
 		if ( $in_loop ) {
 			
-			$item->excerpt = get_the_excerpt();
+			$item->excerpt = apply_filters( 'the_excerpt' , get_post_field('post_excerpt', $post->ID ) );
 		
 		}; // end if
 		
