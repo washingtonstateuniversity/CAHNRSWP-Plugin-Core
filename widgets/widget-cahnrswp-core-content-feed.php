@@ -1,24 +1,20 @@
 <?php
-class CAHNRSWP_Core_Content_Feed extends WP_Widget {
-	
-	private $model;
-	
-	private $view;
+class Widget_CAHNRSWP_Core_Content_Feed extends WP_Widget {
 
 	/**
 	 * Sets up the widgets name etc
 	 */
 	public function __construct() {
 		
+		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-content-feed.php';
+		
+		$this->defaults['feed_source'] = get_site_url();
+		
 		parent::__construct(
 			'cahnrswp_content_feed', // Base ID
 			'Content Feed', // Name
 			array( 'description' => 'Feed Content dynamically or by URL ', ) // Args
 		);
-		
-		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-content-feed-model.php';
-		
-		$this->model = new CAHNRSWP_Core_Content_Feed_Model();
 		
 	} // end method __construct
 
@@ -29,35 +25,17 @@ class CAHNRSWP_Core_Content_Feed extends WP_Widget {
 	 */
 	public function widget( $args, $instance ) {
 		
-		$this->model->cwp_set_defaults( $instance );
+		$content_feed = new CAHNRSWP_Core_Content_Feed( $instance );
 		
-		$items = CAHNRSWP_Core_Query::cwp_get_items( $instance );
+		$title = $content_feed->cwp_get_title();
 		
-		if ( $items ) {
+		$html = $content_feed->cwp_get_feed();
 		
-			echo $args['before_widget'];
-			
-			if ( ! empty( $instance['title'] ) ){
-				
-				echo '<h3 class="cwp-widget-title">' . $instance['title'] . '</h3>';
-				
-			}; // end if
-			
-			echo CAHNRSWP_Core_Post_Display::cwp_display_wrapper( $instance , true );
-			
-			foreach ( $items as $item ) {
-				
-				CAHNRSWP_Core_Query::cwp_item_advanced( $item , $instance );
+		echo $args['before_widget'];
 		
-				CAHNRSWP_Core_Post_Display::cwp_display_post( $item , $instance );
-				
-			}; // end foreach
-			
-			echo CAHNRSWP_Core_Post_Display::cwp_display_wrapper( $instance );
-				
-			echo $args['after_widget'];
+		echo $title . $html;
 		
-		}; // end if
+		echo $args['after_widget'];
 		
 	} // end method widget	
 
@@ -68,11 +46,11 @@ class CAHNRSWP_Core_Content_Feed extends WP_Widget {
 	 */
 	public function form( $instance ) {
 		
+		$content_feed = new CAHNRSWP_Core_Content_Feed( $instance );
+		
 		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-form-model.php';
 		
 		$form_model = new CAHNRSWP_Core_Form_Model();
-		
-		$this->model->cwp_set_defaults( $instance );
 		
 		include CAHNRSWPCOREDIR . '/inc/inc-form-content-feed.php';
 		

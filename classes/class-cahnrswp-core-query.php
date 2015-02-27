@@ -52,18 +52,48 @@ class CAHNRSWP_Core_Query {
 	public static function cwp_get_static_items( $url_array ) {
 		
 		$items = array();
-			
-		$post_data = CAHNRSWP_Core_Query::cwp_get_url_rest_data( $url_array );
 		
-		if ( ! empty( $post_data ) ) {
+		$site_url = get_site_url();
+		
+		foreach ( $url_array as $index => $url ) {
 			
-			foreach ( $post_data as $index => $wp_rest_item ) {
+				if ( strpos( $url , $site_url ) !== false ) {
+					
+					$id =  url_to_postid( $url );
+					
+					
+				}; // end if
 				
-				$items[] = CAHNRSWP_Core_Query::cwp_get_item_from_rest( $index , $wp_rest_item );
+				if ( $id ) {
+					
+					// Local Post
+					
+					$c_post = get_post( $id );
+					
+					$items[] = CAHNRSWP_Core_Query::cwp_get_item_from_post( $c_post );
+					
+				} else {
+					
+					// Remote Post
+					
+					$url_array = array( $url );
+					
+					$post_data = CAHNRSWP_Core_Query::cwp_get_url_rest_data( $url_array );
+					
+					if ( ! empty( $post_data ) ) {
+						
+						foreach ( $post_data as $index => $wp_rest_item ) {
+							
+							$items[] = CAHNRSWP_Core_Query::cwp_get_item_from_rest( $index , $wp_rest_item );
+							
+						}; // end foreach
+						
+					}; // end if
 				
-			}; // end foreach
-			
-		}; // end if
+				}; // end if
+				
+		
+		}; // end foreach
 		
 		return $items;
 			
@@ -213,6 +243,7 @@ class CAHNRSWP_Core_Query {
 	*/
 	public static function cwp_get_item_from_post( $post , $in_loop = true ) {
 		
+		
 		$item = new stdClass();
 		
 		if ( isset( $post->post_type ) ){
@@ -224,15 +255,11 @@ class CAHNRSWP_Core_Query {
 			$item->content_type = '';
 		};
 		
-		$item->title = get_the_title( $post->ID );
+		$item->title = apply_filters( 'the_title' ,  $post->post_title );
 			
-		$item->content = get_the_content( $post->ID );
-		
-		if ( $in_loop ) {
+		$item->content = apply_filters( 'the_content' ,  $post->post_content );
 			
-			$item->excerpt = apply_filters( 'the_excerpt' , get_post_field('post_excerpt', $post->ID ) );
-		
-		}; // end if
+		$item->excerpt = strip_tags( strip_shortcodes( apply_filters( 'the_excerpt' , get_post_field('post_excerpt', $post->ID ) ) ) );
 		
 		$item->link = get_permalink( $post->ID );
 		
@@ -357,6 +384,12 @@ class CAHNRSWP_Core_Query {
 			unset( $item->author );
 			
 		}; 
+		
+		if ( ! empty( $instance['short_excerpt'] ) ){
+			
+			$item->excerpt = wp_trim_words( $item->excerpt , 15 );
+			
+		} // end if
 		 		
 	} // end method cwp_post_obj_advanced
 	

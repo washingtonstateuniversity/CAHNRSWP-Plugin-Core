@@ -14,7 +14,7 @@ class CAHNRSWP_Core_Post_Display {
 			 
 			case 'list':
 			 	break;
-				
+			case 'gallery':	
 			case 'promo-gallery':
 				
 				include CAHNRSWPCOREDIR . 'inc/inc-display-gallery.php';
@@ -83,7 +83,7 @@ class CAHNRSWP_Core_Post_Display {
 
 	}
 	
-	public static function cwp_display_wrapper( $instance , $start = false , $css = '' ){
+	public static function cwp_add_display_wrapper( $instance , $content , $css = '' ){
 		
 		if ( empty( $instance['tag'] ) ){
 			
@@ -91,19 +91,63 @@ class CAHNRSWP_Core_Post_Display {
 			
 		};// end if
 		
+		$html = '<' . $instance['tag'] . ' class="' . $instance['display'] . ' cwp-item-content" style="' . $css . '">';
+		
+		$html .= $content;
+		
+		$html .= '</' . $instance['tag'] . '>';
+		
+		if( ! empty( $instance['show_accordion'] ) ) {
+			
+			$html = '<div class="cwp-section-accordion-content">' . $html . '</div>';
+			
+			$html = '<script type="text/javascript"> if( typeof cwp_section_accordion === "undefined" ){ var cwp_section_accordion = function(){ jQuery( "body" ).on( "click" , "a.cwp-section-accordion-link" , function( event ){ event.preventDefault();})};</script>';
+			
+		}; // end if
+		
+		return $html;
+		
+	} // end method cwp_display_wrapper
+	
+	
+	
+	/*public static function cwp_display_wrapper( $instance , $start = false , $css = '' ){
+		
+		
+		if ( empty( $instance['tag'] ) ){
+			
+			$instance['tag'] = CAHNRSWP_Core_Post_Display::cwp_get_tag( $instance );
+			
+		};// end if
+		
+		
+		
+		
 		if ( $start ){
 			
-			$tag = '<' . $instance['tag'] .' class="' . $instance['display'] . '" style="' . $css . '">';
+			$tag = '<' . $instance['tag'] .' class="' . $instance['display'] . ' cwp-item-content" style="' . $css . '">';
+			
+			if ( ! empty( $instance['show_accordion'] ) ){
+			
+				$tag = '<div class="cwp-accordion-content">' . $tag;
+			
+			}; // end if
 			
 		} else {
 	
 			$tag = '</' . $instance['tag'] .'>';
 			
+			if ( ! empty( $instance['show_accordion'] ) ){
+			
+				$tag . '</div>';
+			
+			}; // end if
+			
 		} // end if
 		
 		return $tag;
 		
-	} // end method cwp_display_wrapper
+	} // end method cwp_display_wrapper */
 	
 	/*
 	 * @desc - Gets slideshow from instance
@@ -177,6 +221,9 @@ class CAHNRSWP_Core_Post_Display {
 				case 'promo-gallery' :
 					$tag = 'ul';
 					break;
+				default:
+					$tag = 'div';
+					break;
 				
 			}; // end switch
 			
@@ -198,7 +245,7 @@ class CAHNRSWP_Core_Post_Display {
 			
 		} else if( $start ) {
 			
-			$lb_class = ( ! empty( $instance['show_lightbox'] ) ) ? 'show-lightbox-content' : '';
+			$lb_class = ( ! empty( $instance['show_lightbox'] ) ) ? 'clb-action' : '';
 			
 			$link = '<a href="' . $item->link . '" class="' . $lb_class . '" >';
 			

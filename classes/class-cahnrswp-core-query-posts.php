@@ -72,7 +72,7 @@ class CAHNRWP_Core_Query_Posts {
 			
 		$post_obj->content = get_the_content();
 			
-		$post_obj->excerpt = get_the_excerpt();
+		$post_obj->excerpt = strip_shortcodes( get_the_excerpt() );
 		
 		$post_obj->link = get_permalink();
 		
@@ -122,6 +122,12 @@ class CAHNRWP_Core_Query_Posts {
 			unset( $post->author );
 			
 		}; 
+		
+		if ( ! empty( $instance['short_excerpt'] ) ){
+			
+			$post->excerpt = wp_trim_words( $post->excerpt , 15 );
+			
+		} // end if
 		 		
 	} // end method cwp_post_obj_advanced
 	

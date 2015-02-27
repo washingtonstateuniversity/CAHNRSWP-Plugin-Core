@@ -10,3 +10,17 @@ Filter Insert Post widget prior to query
 cwp_core_get_post_obj
 Location: classes/class-cahnrswp-core-query-posts.php
 Filters the modified $post_object before returning it.
+
+Shortcodes:
+----------------------------------------------------
+
+cwpinsert
+options
+	title = Title, defaults to post title if not set
+	url = URL of content that should be inserted
+	open = ( 1/0 ) Force open
+	display = ( article-accordion ) How the content should be displayed
+	
+example [cwpinsert title="About CAHNRS" url="http://cahnrs.wsu.edu/overview/" display="article-accordion" open="1"]
+
+-----------------------------------------------------

@@ -23,7 +23,7 @@ echo '<div class="cwp-slider slider-' . $instance['per_row'] . '-visible" style=
 			
 			if ( 0 == $slide_index ) {
 				
-				echo CAHNRSWP_Core_Post_Display::cwp_display_wrapper( $instance , true , 'width: 100%; margin: 0; padding: 0;list-style-type: none;' );
+				//echo CAHNRSWP_Core_Post_Display::cwp_display_wrapper( $instance , true , 'width: 100%; margin: 0; padding: 0;list-style-type: none;' );
 				
 			}; // end if
 			
@@ -33,7 +33,7 @@ echo '<div class="cwp-slider slider-' . $instance['per_row'] . '-visible" style=
 			
 			if ( ( $instance['per_row'] - 1 ) == $slide_index || count( $items ) == ( $index + 1 ) ) {
 				
-				echo CAHNRSWP_Core_Post_Display::cwp_display_wrapper( $instance );
+				//echo CAHNRSWP_Core_Post_Display::cwp_display_wrapper( $instance );
 				
 				$slide_index = 0;
 				

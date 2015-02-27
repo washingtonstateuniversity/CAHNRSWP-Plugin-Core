@@ -21,67 +21,17 @@ class CAHNRSWP_Core_Insert_Post extends WP_Widget {
 	 */
 	public function widget( $args, $instance ) {
 		
-		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-query-posts.php';
-			
-		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-post-display.php';
+		$content_feed = new CAHNRSWP_Core_Content_Feed( $instance );
 		
-		$cwp_query_posts = new CAHNRWP_Core_Query_Posts();
+		$title = $content_feed->cwp_get_title();
 		
-		$cwp_display_posts = new CAHNRSWP_Core_Post_display();
+		$html = $content_feed->cwp_get_feed();
 		
 		echo $args['before_widget'];
 		
-		if( isset( $instance['title'] ) && $instance['title'] ){
-			
-			echo '<h3>' . $instance['title'] . '</h3>';
-			
-		}
-		
-		if ( ! isset( $instance['display'] ) ) $instance['display'] = 'promo';
-		
-		$insert_post = apply_filters( 'cwp_core_feed_insert_post' , array() , $instance );
-		
-		if ( ! $insert_post ){
-		
-			$query_args = $cwp_query_posts->cwp_get_local_query( $instance );
-			
-			$the_query = new WP_Query( $query_args );
-	
-			if ( $the_query->have_posts() ) {
-	
-				while ( $the_query->have_posts() ) {
-					
-					$the_query->the_post();
-					
-					$insert_post[] = $cwp_query_posts->cwp_get_loop_post_obj( $the_query->post , $instance );
-									
-				}; // end while
-				
-			}; // end if
-			
-			wp_reset_postdata();
-			
-		} // end if !posts
-		
-		if ( $insert_post ) {
-			
-			if( 'list' == $instance['display'] ) echo '<ul>';
-			
-			foreach( $insert_post as $post ){
-				
-				$cwp_query_posts->cwp_post_obj_advanced( $post , $instance );
-				
-				$cwp_display_posts->cwp_display_post( $post , $instance );
-				
-			}; // end foreach
-			
-			if( 'list' == $instance['display'] ) echo '</ul>';
-			
-		} // end if
+		echo $title . $html;
 		
 		echo $args['after_widget'];
-		
-		echo $cwp_display_posts->cwp_display_js( $instance );
 		
 	}	
 

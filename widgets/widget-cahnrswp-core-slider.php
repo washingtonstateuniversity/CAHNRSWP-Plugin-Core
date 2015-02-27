@@ -1,5 +1,5 @@
 <?php
-class CAHNRSWP_Core_Slider extends WP_Widget {
+class Widget_CAHNRSWP_Core_Slider extends WP_Widget {
 	
 	private $model;
 
@@ -14,9 +14,9 @@ class CAHNRSWP_Core_Slider extends WP_Widget {
 			array( 'description' => 'Feed content in a dynamic slider.', ) // Args
 		);
 		
-		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-slider-model.php';
+		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-slider.php';
 		
-		$this->model = new CAHNRSWP_Core_Slider_Model();
+		//$this->model = new CAHNRSWP_Core_Slider_Model();
 		
 	} // end method __construct
 
@@ -28,19 +28,13 @@ class CAHNRSWP_Core_Slider extends WP_Widget {
 	 */
 	public function widget( $args, $instance ) {
 		
-		$this->model->cwp_set_defaults( $instance );
-		
-		$items = CAHNRSWP_Core_Query::cwp_get_items( $instance );
-		
-		if ( $items ) {
-		
 			echo $args['before_widget'];
 			
-			include CAHNRSWPCOREDIR . '/inc/inc-display-slider.php';
+			$slider = new CAHNRSWP_Core_Slider( $instance , $this );
+			
+			echo $slider->get_html();
 				
 			echo $args['after_widget'];
-		
-		}; // end if
 		
 	} // end method widget	 
 
@@ -51,7 +45,7 @@ class CAHNRSWP_Core_Slider extends WP_Widget {
 	 */
 	public function form( $instance ) {
 		
-		$this->model->cwp_set_defaults( $instance );
+		$slider = new CAHNRSWP_Core_Slider( $instance , $this );
 		
 		include CAHNRSWPCOREDIR . '/inc/inc-form-slider-feed.php';
 		
@@ -68,4 +62,5 @@ class CAHNRSWP_Core_Slider extends WP_Widget {
 		return $new_instance;
 		// processes widget options to be saved
 	}
+
 }

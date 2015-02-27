@@ -1,4 +1,5 @@
 <?php CAHNRSWP_Core_Form_Model::cwp_set_core_defaults( $instance ); ?>
+test
 <ul class="cwp-form">
 	<li class="cwp-form-section cwp-field-set">
     	<?php include CAHNRSWPCOREDIR . '/inc/inc-form-part-title.php'; ?>

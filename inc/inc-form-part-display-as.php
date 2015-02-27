@@ -4,6 +4,7 @@
         <option value="promo" <?php selected( $instance['display'] , 'promo' ); ?> >Promo</option>
         <option data-field="dynamic-display-row" value="promo-gallery" <?php selected( $instance['display'] , 'promo-gallery' ); ?> >Gallery</option>
         <option value="list" <?php selected( $instance['display'] , 'list' ); ?> >List</option>
+        <option value="accordion" <?php selected( $instance['display'] , 'accordion' ); ?> >Accordion</option>
         <option value="full" <?php selected( $instance['display'] , 'full' ); ?> >Full Content</option>
     </select> 
 </p><p class="dynamic-display-row dynamic-field<?php if ( 'promo-gallery' == $instance['display'] ) echo ' active-field' ;?>" >

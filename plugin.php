@@ -11,6 +11,10 @@
 */
 class CAHNRSWP_Core {
 	
+	public $news;
+	
+	public $shortcodes;
+	
 	private static $instance = null;
 	
 	/**
@@ -33,9 +37,11 @@ class CAHNRSWP_Core {
 	
 	private function __construct(){
 		
+		define( 'CAHNRSWPCOREKEY' , 'zPD7ukOLK9' ); // Key for encryption
+		
 		define( 'CAHNRSWPCOREURL' , plugin_dir_url( __FILE__ ) ); // Plugin Base url
 		
-		define( 'CAHNRSWPCOREDIR' , plugin_dir_path( __FILE__ ) ); // Plugin Directory Path
+		define( 'CAHNRSWPCOREDIR' , plugin_dir_path( __FILE__ ) ); // Plugin Directory Path 
 		
 		// Load core classes 
 		
@@ -44,6 +50,20 @@ class CAHNRSWP_Core {
 		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-query.php';
 		 
 		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-post-display.php';
+		
+		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-post-admin.php';
+		
+		require_once CAHNRSWPCOREDIR . '/classes/class-ccl-query.php';
+		
+		require_once CAHNRSWPCOREDIR . '/classes/class-ccl-article.php';
+		
+		require_once CAHNRSWPCOREDIR . '/classes/class-ccl-shortcode.php';
+		
+		if ( is_admin() ){
+			
+			require_once CAHNRSWPCOREDIR . '/classes/class-ccl-admin-post.php';
+			
+		} // end admin
 		
 		// Add actions
 		
@@ -55,11 +75,21 @@ class CAHNRSWP_Core {
 		
 		// Add Supported Modules
 		
-		$this->cwp_modules(); 
+		$this->cwp_modules();
+		
+		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-news.php';
+		
+		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-publications.php'; 
+		
+		$this->news = new CAHNRSWP_Core_News();
+		
+		$this->publications = new CAHNRSWP_Core_Publications();
 		
 		// Add Shortcodes
 		
 		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-shortcodes.php';
+		
+		$this->shortcodes = new CAHNRSWP_Core_Shortcodes();
 		
 	} // end constructor
 	
@@ -72,17 +102,17 @@ class CAHNRSWP_Core {
 			
 			add_action( 'admin_enqueue_scripts', array( $this, 'cwp_admin_enqueue_scripts' ), 20 );
 			
-			add_action( 'edit_form_after_title', array( $this ,'cwp_edit_form_after_title' ) );
+			//add_action( 'edit_form_after_title', array( $this ,'cwp_edit_form_after_title' ) );
 			
 			add_action( 'save_post' , array( $this , 'cwp_save_post' ) );
 		
-		}; // end if
+		} // end if
 		
 		add_action( 'widgets_init', array( $this , 'cwp_register_widgets') );
 		
 		add_action( 'wp_enqueue_scripts', array( $this, 'cwp_enqueue_scripts' ), 20 );
 		
-		add_action( 'init', array( $this , 'cwp_init' ) );
+		//add_action( 'init', array( $this , 'cwp_init' ) );
 		
 		add_action('wp_head', array( $this , 'cwp_wp_head' ) );
 		
@@ -93,13 +123,13 @@ class CAHNRSWP_Core {
 	*/
 	private function cwp_add_filters(){
 		
-		add_filter( 'post_thumbnail_html' , array( $this , 'cwp_post_thumbnail_html' ) , 20 , 5 );
+		//add_filter( 'post_thumbnail_html' , array( $this , 'cwp_post_thumbnail_html' ) , 20 , 5 );
 		
 		if ( ! empty( $_GET['cwpcore_service'] ) ){ 
 		
 			add_filter( 'template_include', array( $this , 'cwp_template_include' ) , 99 );
 		
-		}; // end if
+		} // end if
 		
 	} // end method cwp_add_filters
 		
@@ -140,8 +170,15 @@ class CAHNRSWP_Core {
 			case 'query':
 				$template = CAHNRSWPCOREDIR . '/service/service-cahnrswp-core-query.php';
 				break;
+				
+			case 'iframe':
+				$template = CAHNRSWPCOREDIR . '/service/service-cahnrswp-core-iframe.php';
+				break;
+			case 'ajax':
+				$template = CAHNRSWPCOREDIR . '/service/service-cahnrswp-core-ajax.php';
+				break;
 			
-		}; // end switch
+		} // end switch
 		
 		return $template;
 		
@@ -153,41 +190,41 @@ class CAHNRSWP_Core {
 	*/
 	public function cwp_post_thumbnail_html( $html, $post_id, $post_thumbnail_id, $size, $attr ){
 		
-		if ( empty( $size ) || 'thumbnail' == $size ){
+		//if ( empty( $size ) || 'thumbnail' == $size || 'thumbnail-square' == $size ){
 		
-			if ( empty( $html ) && $post_id ) {
+			//if ( empty( $html ) && $post_id ) {
 				
-				$img_src = get_post_meta( $post_id , '_default_img_src' , true );
+				//$img_src = get_post_meta( $post_id , '_default_img_src' , true );
 				
-			} else {
+			//} else {
 				
 				/*
 				 * Instead of doing more calls to get the src, lets try and
 				 * pull it from the $html.
 				*/
-				preg_match('/src="(.*?)"/i', $html, $matches );
+				//preg_match('/src="(.*?)"/i', $html, $matches );
 				
-				if ( $matches ){
+				//if ( $matches ){
 					
-					$img_src = str_replace ( array( 'src="' , '"' ) , '' , $matches[0] );
+					//$img_src = str_replace ( array( 'src="' , '"' ) , '' , $matches[0] );
 					
-				};
+				//}
 			
-			}; // end if
+			//} // end if
 			
-			if ( ! empty( $img_src ) ){
+			//if ( ! empty( $img_src ) ){
 				
-				$html = '<img ';
+				//$html = '<img ';
 				
-				$html .= 'src="' . CAHNRSWPCOREURL . '/images/spacer4-3.png" ';
+				//$html .= 'src="' . CAHNRSWPCOREURL . '/images/spacer4-3.png" ';
 				
-				$html .= 'style="background-image: url(' . $img_src . '); background-repeat: no-repeat; background-size: cover; background-position: center center; width: 100%; display: block;" ';
+				//$html .= 'style="background-image: url(' . $img_src . '); background-repeat: no-repeat; background-size: cover; background-position: center center; width: 100%; display: block;" ';
 				
-				$html .= ' />'; 
+				//$html .= ' />'; 
 				
-			}; // end if
+			//} // end if
 			
-		}; // end if
+		//} // end if
 		
     	return $html;
 	}
@@ -216,7 +253,7 @@ class CAHNRSWP_Core {
 			
 			include 'inc/inc-editor-form-news-item.php';
 			
-		}; // end if
+		} // end if
 		
 	} // end cwp_edit_form_after_title
 	
@@ -226,7 +263,7 @@ class CAHNRSWP_Core {
 		
 		wp_enqueue_script( 'cahnrswp-core-js', CAHNRSWPCOREURL . '/js/core.js' , array(), '0.0.1', false );
 		
-		wp_enqueue_style( 'cahnrswp-core', CAHNRSWPCOREURL . '/css/cahnrswp-core.css' , array(), '0.0.1', false );
+		wp_enqueue_style( 'cahnrswp-core', CAHNRSWPCOREURL . '/css/cahnrswp-core.css' , array(), '0.0.2', false );
 		
 		wp_enqueue_style( 'jquery-ui-css', '//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css' , array(), '0.0.1', false );
 		
@@ -242,9 +279,7 @@ class CAHNRSWP_Core {
 	
 	public function cwp_register_widgets(){
 		
-		require_once CAHNRSWPCOREDIR.'widgets/cahnrswp-core-feed.php';
 		
-		register_widget( 'CAHNRSWP_Core_Feed' );
 		
 		/*require_once CAHNRSWPCOREDIR.'widgets/cahnrswp-core-related-links.php';
 		
@@ -254,24 +289,24 @@ class CAHNRSWP_Core {
 		
 		register_widget( 'CAHNRSWP_Core_Insert_Post' );
 		
-		require_once CAHNRSWPCOREDIR.'widgets/cahnrswp-core-slider.php';
+		require_once CAHNRSWPCOREDIR.'widgets/widget-cahnrswp-core-slider.php';
 		
-		register_widget( 'CAHNRSWP_Core_Slider' );
+		register_widget( 'Widget_CAHNRSWP_Core_Slider' );
 		
 		require_once CAHNRSWPCOREDIR.'widgets/cahnrswp-core-tabs.php';
 		
 		register_widget( 'CAHNRSWP_Core_Tabs' );
 		
-		require_once CAHNRSWPCOREDIR.'widgets/cahnrswp-core-content-feed.php';
+		require_once CAHNRSWPCOREDIR.'widgets/widget-cahnrswp-core-content-feed.php';
 		
-		register_widget( 'CAHNRSWP_Core_Content_Feed' );
+		register_widget( 'Widget_CAHNRSWP_Core_Content_Feed' );
 		
 	}
 	
 	/*
 	 * @desc Register custom post types
 	*/
-	private function cwp_register_post_types(){
+	/*private function cwp_register_post_types(){
 		
 		$news_labels = array(
 			'name'          => 'News Items',
@@ -288,7 +323,7 @@ class CAHNRSWP_Core {
 		
 		register_post_type( 'news_item', $news_args );
 		
-	}
+	}*/
 	
 	public function cwp_save_post( $post_id ){
 		
@@ -331,17 +366,17 @@ class CAHNRSWP_Core {
 						
 						$clean = sanitize_text_field( $value ); 
 						
-					}; // end if
+					} // end if
 					
-				}; // end if text
+				} // end if text
 				
-			}; // end if
+			} // end if
 			
 			if ( 'undefined' != $clean ){
 				
 				update_post_meta( $post_id , $key , $clean );
 				
-			}; // end if
+			} // end if
 			
 		} // end foreach
 		
