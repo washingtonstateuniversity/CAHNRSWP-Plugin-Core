@@ -103,7 +103,7 @@ class CAHNRSWP_Core_Publications extends CAHNRSWP_Core_Post_Admin {
 			'public'      => true,
 			'labels'       => $pub_labels,
 			'has_archive' => true,
-			'rewrite'     => array( 'slug' => 'publication' ),
+			'rewrite'     => array( 'slug' => 'publications' ),
 			'taxonomies' => array( 'category' , 'post_tag' ),
 			'supports'    => array( 'title', 'editor', 'author', 'thumbnail', ),
 		);
