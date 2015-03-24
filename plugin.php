@@ -3,12 +3,29 @@
 * Plugin Name: CAHNRSWP Core
 * Plugin URI:  http://cahnrs.wsu.edu/communications/
 * Description: Core feature set for CAHNRS sites.
-* Version:     0.0.1
+* Version:     0.0.2
 * Author:      CAHNRS Communications, Danial Bleile
 * Author URI:  http://cahnrs.wsu.edu/communications/
 * License:     Copyright Washington State University
 * License URI: http://copyright.wsu.edu
 */
+
+define( 'CAHNRSWPCOREKEY' , 'zPD7ukOLK9' ); // Key for encryption
+		
+define( 'CAHNRSWPCOREURL' , plugin_dir_url( __FILE__ ) ); // Plugin Base url
+		
+define( 'CAHNRSWPCOREDIR' , plugin_dir_path( __FILE__ ) ); // Plugin Directory Path 
+
+require_once CAHNRSWPCOREDIR . '/classes/class-cwp-post-public.php';
+
+require_once CAHNRSWPCOREDIR . '/classes/class-ccl-query.php';
+		
+require_once CAHNRSWPCOREDIR . '/classes/class-ccl-article.php';
+
+require_once CAHNRSWPCOREDIR . '/classes/class-ccl-shortcode.php';
+
+require_once CAHNRSWPCOREDIR . '/classes/class-ccl-display.php';
+
 class CAHNRSWP_Core {
 	
 	public $news;
@@ -37,11 +54,7 @@ class CAHNRSWP_Core {
 	
 	private function __construct(){
 		
-		define( 'CAHNRSWPCOREKEY' , 'zPD7ukOLK9' ); // Key for encryption
 		
-		define( 'CAHNRSWPCOREURL' , plugin_dir_url( __FILE__ ) ); // Plugin Base url
-		
-		define( 'CAHNRSWPCOREDIR' , plugin_dir_path( __FILE__ ) ); // Plugin Directory Path 
 		
 		// Load core classes 
 		
@@ -53,11 +66,7 @@ class CAHNRSWP_Core {
 		
 		require_once CAHNRSWPCOREDIR . '/classes/class-cahnrswp-core-post-admin.php';
 		
-		require_once CAHNRSWPCOREDIR . '/classes/class-ccl-query.php';
 		
-		require_once CAHNRSWPCOREDIR . '/classes/class-ccl-article.php';
-		
-		require_once CAHNRSWPCOREDIR . '/classes/class-ccl-shortcode.php';
 		
 		if ( is_admin() ){
 			
@@ -259,13 +268,13 @@ class CAHNRSWP_Core {
 	
 	public function cwp_enqueue_scripts() {
 		
-		wp_enqueue_script( 'cycle2', CAHNRSWPCOREURL . '/js/cycle2.js' , array(), '0.0.1', false );
+		wp_enqueue_script( 'cycle2', CAHNRSWPCOREURL . '/js/cycle2.js' , array(), '0.0.2', false );
 		
-		wp_enqueue_script( 'cahnrswp-core-js', CAHNRSWPCOREURL . '/js/core.js' , array(), '0.0.1', false );
+		wp_enqueue_script( 'cahnrswp-core-js', CAHNRSWPCOREURL . '/js/core.js' , array(), '0.0.2', false );
 		
-		wp_enqueue_style( 'cahnrswp-core', CAHNRSWPCOREURL . '/css/cahnrswp-core.css' , array(), '0.0.2', false );
+		wp_enqueue_style( 'cahnrswp-core', CAHNRSWPCOREURL . '/css/cahnrswp-core.css' , array(), '0.0.3', false );
 		
-		wp_enqueue_style( 'jquery-ui-css', '//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css' , array(), '0.0.1', false );
+		wp_enqueue_style( 'jquery-ui-css', '//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css' , array(), '0.0.4', false );
 		
 	} // cwp_enqueue_scripts
 	

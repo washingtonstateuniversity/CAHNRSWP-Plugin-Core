@@ -23,7 +23,21 @@ class CAHNRSWP_Core_News extends CAHNRSWP_Core_Post_Admin {
 		
 		add_action( 'template_redirect', array( $this , 'redirect_source' ) );
 		
+		add_filter( 'ccl_get_post_article_args' , array( $this , 'ccl_get_post_article_args' ) , 99 , 2 );
+		
 	} // end __construct
+	
+	public function ccl_get_post_article_args( $args , $post ){
+		
+		if ( 'news' == $post->post_type && empty( $args['more_url'] ) ){
+			
+			$args['new_window'] = 1;
+			
+		}
+		
+		return $args;
+		
+	}
 	
 	public function redirect_source(){
 		

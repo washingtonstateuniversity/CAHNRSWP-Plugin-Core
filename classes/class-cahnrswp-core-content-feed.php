@@ -5,6 +5,8 @@ class CAHNRSWP_Core_Content_Feed {
 	
 	private $instance;
 	
+	public $ccl_display;
+	
 	public function __construct( $instance ){
 		
 		$this->instance = $instance;
@@ -14,6 +16,8 @@ class CAHNRSWP_Core_Content_Feed {
 		$this->model = new CAHNRSWP_Core_Content_Feed_Model();
 		
 		$this->model->cwp_set_defaults( $this->instance );
+		
+		$this->ccl_display = new CCL_Display_Core();
 		
 	}
 	
@@ -54,15 +58,9 @@ class CAHNRSWP_Core_Content_Feed {
 				
 				foreach( $this->instance['insert_urls'] as $url ){
 					
-					$wp_rest_item = $ccl_query->get_post_from_rest( $url );
-		
-					$article = $ccl_article->get_rest_article( $wp_rest_item );
+					$article = $ccl_query->get_single_article( $url , $this->instance );
 					
-					if( $article ) {
-						
-						$articles[] = $ccl_article->get_article_display( $article , $this->instance );
-						
-					} // end if 
+					$articles[] = $this->ccl_display->get_article_html( $article , $this->instance );
 					
 				} // end foreach
 				
