@@ -153,9 +153,9 @@ class CCL_Article_Core {
 			
 		}; // end if
 		
+		$cats = array();
+		
 		if ( ! empty( $wp_rest_item['terms']['category'] ) ){
-			
-			$cats = array();
 			
 			foreach( $wp_rest_item['terms']['category'] as $category ){
 				
@@ -163,9 +163,9 @@ class CCL_Article_Core {
 				
 			} // end foreach
 			
-			$article['categories'] = $cats;
-			
 		} // end if
+		
+		$article['categories'] = $cats;
 		
 		return apply_filters( 'get_ccl_article' , $article , $args );
 		
@@ -276,7 +276,15 @@ class CCL_Article_Core {
 		
 		$open = ( ! empty( $args['open'] ) )? 'block' : 'none'; 
 		
-		$html .= '<ul id="' . $id . '" class="ccl-article-accordion ' . implode( ' ' , $article['categories'] ) . '">';
+		$cats = '';
+		
+		if ( ! empty( $article['categories'] ) && is_array( $article['categories'] ) ) {
+			
+			$cats = implode( ' ' , $article['categories'] ); 
+			
+		} // end if
+		
+		$html .= '<ul id="' . $id . '" class="ccl-article-accordion ' . $cats . '">';
 			
 			$html .= '<li class="ccl-title">' . $article['title'] . '</li>';
 			
